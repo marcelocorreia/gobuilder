@@ -15,8 +15,8 @@ type Repository struct {
 	Id       string `json:"id"`
 	Type     string `json:"type"`
 	URL      string `json:"url"`
-	User     string `json:user"`
-	Password string `json:password"`
+	User     string `json:"user"`
+	Password string `json:"password"`
 }
 
 

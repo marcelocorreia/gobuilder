@@ -39,6 +39,13 @@ func clean() {
 	}
 }
 
+func checkHome(){
+	homeDir:= os.Getenv("HOME")+"/.gobuilder"
+	if _, err := os.Stat(homeDir); os.IsNotExist(err) {
+		os.Mkdir(homeDir,00750)
+	}
+}
+
 func checkProjectFile() {
 	dir, err := filepath.Abs(filepath.Dir(*path))
 	if err != nil {
@@ -77,6 +84,13 @@ func checkProjectFile() {
 				project.ArtifactId = pArti
 			}
 
+			packaging := utils.QuestionF("Packaging: [%s] ", "tar.gz")
+			if pArti == "" {
+				project.Packaging= "tar.gz"
+			}else {
+				project.Packaging= packaging
+			}
+
 
 			file, _ := json.MarshalIndent(&project, "", "  ")
 			wr := []byte(file)
@@ -91,12 +105,14 @@ func checkProjectFile() {
 			ct.Foreground(ct.White, false)
 		}else {
 			fmt.Println("Aborted")
+			ct.Foreground(ct.White, false)
 			os.Exit(1)
 		}
 
 	}
 
 }
+
 func dist() {
 	dir, err := filepath.Abs(filepath.Dir(*path))
 	os.Chdir(dir)

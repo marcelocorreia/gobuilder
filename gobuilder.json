@@ -3,9 +3,8 @@
   "artifactId": "gobuilder",
   "name": "gobuilder",
   "version": "0.0.1-SNAPSHOT",
-  "repository-id": "tar.gz",
-  "repository-url": "",
   "file": "",
-  "packaging": "",
-  "generate-pom": false
+  "packaging": "tar.gz",
+  "generate-pom": false,
+  "repositories": null
 }

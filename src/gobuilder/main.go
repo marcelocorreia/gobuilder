@@ -45,6 +45,7 @@ func main() {
 	var cmds string
 	cmds = kingpin.Parse()
 	checkProjectFile()
+	checkHome()
 	switch cmds {
 	case "build":
 		build()
