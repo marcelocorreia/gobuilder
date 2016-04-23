@@ -14,6 +14,20 @@
 			"branch": "master"
 		},
 		{
+			"importpath": "github.com/correia-io/goutils/src/logd",
+			"repository": "https://github.com/correia-io/goutils",
+			"revision": "c703f66f21bec4a278937a9cd50ba48ffda85f11",
+			"branch": "master",
+			"path": "/src/logd"
+		},
+		{
+			"importpath": "github.com/correia-io/goutils/src/utils",
+			"repository": "https://github.com/correia-io/goutils",
+			"revision": "c703f66f21bec4a278937a9cd50ba48ffda85f11",
+			"branch": "master",
+			"path": "/src/utils"
+		},
+		{
 			"importpath": "github.com/davecgh/go-spew/spew",
 			"repository": "https://github.com/davecgh/go-spew",
 			"revision": "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d",
@@ -30,6 +44,12 @@
 			"importpath": "github.com/op/go-logging",
 			"repository": "https://github.com/op/go-logging",
 			"revision": "970db520ece77730c7e4724c61121037378659d9",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/pborman/uuid",
+			"repository": "https://github.com/pborman/uuid",
+			"revision": "c55201b036063326c5b1b89ccfe45a184973d073",
 			"branch": "master"
 		},
 		{
