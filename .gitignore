@@ -54,3 +54,5 @@ vendor/pkg/
 sshkey*
 dist/*
 
+GOPATH*
+

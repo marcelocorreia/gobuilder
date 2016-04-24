@@ -10,7 +10,7 @@ type Project struct {
 	Packaging    string              `json:"packaging"`
 	GeneratePom  bool                `json:"generate-pom"`
 	Repositories []Repository        `json:"repositories"`
-	Builds       map[string]string   `json:"builds"`
+	Builds       []Build         	 `json:"builds"`
 }
 
 type Repository struct {
@@ -19,4 +19,9 @@ type Repository struct {
 	URL      string `json:"url"`
 	User     string `json:"user,omitempty"`
 	Password string `json:"password,omitempty"`
+}
+
+type Build struct {
+	OS   string
+	Arch string
 }

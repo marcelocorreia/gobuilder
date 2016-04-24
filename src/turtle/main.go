@@ -7,12 +7,16 @@ import (
 	"github.com/correia-io/goutils/src/utils"
 	"github.com/correia-io/goutils/src/logd"
 	"gopkg.in/alecthomas/kingpin.v2"
+	"os/signal"
+	"syscall"
+	"github.com/daviddengcn/go-colortext"
 )
 
 var (
 	TURTLE_FILE string
 	TURTLE_HOME string
 	TURTLE_VERSION = "0.0.1-SNAPSHOT"
+	TURTLE_PROJECT_PATH string
 	rt = utils.RuntimeHelper{}
 	logger = logd.GetLogger()
 	wiz = utils.Wizard{}
@@ -25,7 +29,7 @@ var (
 var (
 	app = kingpin.New("turtle", "turtle - build, test, deploy, release, install build tools.")
 
-	TURTLE_PROJECT_PATH = kingpin.Flag("path", "Go project path").Default(".").String()
+	projectPath = kingpin.Flag("path", "Go project path").Default(".").String()
 	batchMode = kingpin.Flag("batch", "Runs commands without asking for any input").Bool()
 	buildCommand = kingpin.Command("build", "Runs commands without asking for any input")
 	cleanCommand = kingpin.Command("clean", "Cleans all packages and binaries")
@@ -48,21 +52,35 @@ var (
 
 	versionCommand = kingpin.Command("version", "Version")
 	//EE = versionCommand.Flag("ee", "??").Bool()
-	wtfCMD = kingpin.Command("wtf","WTF??")
 )
 
 func init() {
 	kingpin.CommandLine.HelpFlag.Short('h')
-	TURTLE_HOME = os.Getenv("HOME") + app.Name
-	TURTLE_FILE = *TURTLE_PROJECT_PATH + "/turtle.json"
 }
 
 func main() {
-	os.Chdir(*TURTLE_PROJECT_PATH)
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	signal.Notify(c, syscall.SIGTERM)
+	go func() {
+		<-c
+		ct.Foreground(ct.White, false)
+		fmt.Println("Shutting down gracefully...")
+		defer fmt.Println("Shutdown complete")
+		os.Exit(0)
+	}()
+	os.Chdir(*projectPath)
+	TURTLE_PROJECT_PATH = *projectPath
+	os.Chdir(TURTLE_PROJECT_PATH)
 	cmds = kingpin.Parse()
-	app.Version(project.Version)
 	s := Turtle{}
+	fmt.Println("+----------------------------------------------------------+")
 
+	TURTLE_HOME = os.Getenv("HOME") + app.Name
+	TURTLE_FILE = TURTLE_PROJECT_PATH + "./turtle.json"
+	fmt.Println("Turtle project file:" + TURTLE_FILE)
+	project = s.GetProject()
+	app.Version(project.Version)
 	s.CheckHome()
 
 	switch cmds {
@@ -84,12 +102,10 @@ func main() {
 		s.Release()
 	case "version":
 		fmt.Println(app.Name, TURTLE_VERSION)
-	case"wtf":
-		resp:=wiz.Question("WTF??")
-		fmt.Println(resp,"<---")
 
 	//if (*EE) {
-		//s.EE()
+	//s.EE()
 	//}
 	}
+	ct.Foreground(ct.White, false)
 }

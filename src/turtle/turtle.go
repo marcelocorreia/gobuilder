@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"model"
 	"github.com/pborman/uuid"
+	"github.com/daviddengcn/go-colortext"
+	"strings"
 )
 
 type Tortuga interface {
@@ -26,23 +28,18 @@ type Tortuga interface {
 type Turtle struct{}
 
 func (s Turtle) Build() {
-	os.Chdir(*TURTLE_PROJECT_PATH)
-	logger.Debug("Building go project @", *TURTLE_PROJECT_PATH)
+	logger.Debug("Building go project @", TURTLE_PROJECT_PATH)
 	rt.RunCommandLogStream("gb", []string{"build"})
-
+	if _, err := os.Stat("dist"); os.IsNotExist(err) {
+		os.Mkdir("dist", 00750)
+	}
 }
 
 func (s Turtle) Clean() {
-	fmt.Println(wiz.QuestionF("You are about to clean all binaries and packages from %s\nProceed: [y/N] ", *TURTLE_PROJECT_PATH))
-
-	//if strings.ToLower(resp) == "y" {
-	//	fmt.Println("Cleaning the house")
-	//	os.RemoveAll(*TURTLE_PROJECT_PATH + "/dist")
-	//	os.RemoveAll(*TURTLE_PROJECT_PATH + "/pkg")
-	//	os.RemoveAll(*TURTLE_PROJECT_PATH + "/bin")
-	//} else {
-	//	fmt.Println("Aborted")
-	//}
+	fmt.Println("Cleaning the house")
+	os.RemoveAll(TURTLE_PROJECT_PATH + "dist")
+	os.RemoveAll(TURTLE_PROJECT_PATH + "pkg")
+	os.RemoveAll(TURTLE_PROJECT_PATH + "bin")
 }
 
 func (s Turtle) CheckHome() {
@@ -113,22 +110,38 @@ func (s Turtle) CheckHome() {
 
 func (s Turtle) Dist() {
 	if (project.ProjectType == "go") {
-		dir, err := filepath.Abs(filepath.Dir(*TURTLE_PROJECT_PATH))
-		os.Chdir(dir)
-		if err != nil {
-			logger.Fatal(err)
+		for _, build := range project.Builds {
+			packBase := fmt.Sprintf("%s-%s-%s-%s", project.ArtifactId, build.OS, build.Arch, project.Version)
+			pack := fmt.Sprintf("%s.%s", packBase, project.Packaging)
+			os.Setenv("GOOS", build.OS)
+			os.Setenv("GOARCH", build.Arch)
+			ct.Foreground(ct.Cyan, true)
+			fmt.Println("Building: ", packBase)
+			ct.Foreground(ct.Green, false)
+			s.Build()
+			ct.Foreground(ct.Cyan, true)
+			fmt.Println("Generating package:", pack)
+			ct.Foreground(ct.Green, false)
+			files, err := ioutil.ReadDir("./bin")
+			if err != nil {
+				logger.Error(err, "Error searching for binaries. ")
+				ct.Foreground(ct.Red,false)
+				fmt.Println("Perhaps the project might not generate an executable")
+				fmt.Println("If you think is a good idea to create package for libraries only, please contact the author or send a pull request at https://github.com/marcelocorreia/turtle")
+				ct.Foreground(ct.White,false)
+				os.Exit(1)
+			}
+
+			for _, file := range files {
+				fmt.Println("Renaming:", file.Name())
+				rpl := fmt.Sprintf("-%s-%s", build.OS, build.Arch)
+				os.Rename("bin/" + file.Name(), "dist/" + strings.Replace(file.Name(), rpl, "", -1))
+			}
+			fileUtils.CopyFile("README.md","dist/README.md")
+			fileUtils.CopyFile("turtle.json","dist/turtle.json")
+
+			compressor.Tar("dist/", pack)
 		}
-		s.Clean()
-		os.Setenv("GOOS", "darwin")
-		os.Setenv("GOARCH", "amd64")
-		s.Build()
-		os.Setenv("GOOS", "linux")
-		os.Setenv("GOARCH", "amd64")
-		s.Build()
-		os.Setenv("GOOS", "windows")
-		os.Setenv("GOARCH", "amd64")
-		s.Build()
-		compressor.Tar(dir + "/dist", "dist.tar.gz")
 	} else if project.ProjectType == "static" {
 		fmt.Println("Packaging Static Project")
 		tmpDir := "/tmp/" + uuid.New()
@@ -165,7 +178,7 @@ func (s Turtle) InstallGB() {
 }
 
 func (s Turtle) RunTests() {
-	dir, err := filepath.Abs(filepath.Dir(*TURTLE_PROJECT_PATH))
+	dir, err := filepath.Abs(filepath.Dir(TURTLE_PROJECT_PATH))
 	os.Chdir(dir)
 	if err != nil {
 		logger.Fatal(err)
@@ -208,7 +221,7 @@ func (s Turtle) GetProject() (model.Project) {
 	projectFile, err := ioutil.ReadFile(TURTLE_FILE)
 	var project model.Project
 	if err != nil {
-		logger.Error("Workspace busted")
+		logger.Error("Workspace busted", err, TURTLE_FILE)
 	} else {
 		var c model.Project
 		err := json.Unmarshal(projectFile, &c)

@@ -31,7 +31,24 @@ func TestTurtle(t *testing.T) {
 		URL:"http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/releases",
 		Type: "releases",
 	}
+
+	bD := model.Build{
+		OS:"darwin",
+		Arch:"amd64",
+	}
+
+	bL := model.Build{
+		OS:"linux",
+		Arch:"amd64",
+	}
+
+	bW := model.Build{
+		OS:"windows",
+		Arch:"amd64",
+	}
+
 	p.Repositories = []model.Repository{rSnap, rRel}
+	p.Builds = []model.Build{bD, bL, bW}
 
 	resp, _ := json.MarshalIndent(&p, "", "  ")
 	fmt.Println(string(resp))
