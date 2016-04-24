@@ -10,15 +10,16 @@ type Project struct {
 	Packaging    string              `json:"packaging"`
 	GeneratePom  bool                `json:"generate-pom"`
 	Repositories []Repository        `json:"repositories"`
-	Builds       []Build         	 `json:"builds"`
+	Builds       []Build                 `json:"builds"`
 }
 
 type Repository struct {
-	Id       string `json:"id"`
-	Type     string `json:"type"`
-	URL      string `json:"url"`
-	User     string `json:"user,omitempty"`
-	Password string `json:"password,omitempty"`
+	Id        string `json:"id"`
+	Type      string `json:"type"`
+	URL       string `json:"url"`
+	User      string `json:"user,omitempty"`
+	Password  string `json:"password,omitempty"`
+	BuildType string `json:"build-type"`
 }
 
 type Build struct {

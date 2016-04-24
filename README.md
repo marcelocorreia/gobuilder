@@ -2,11 +2,56 @@
 
 Turtle is a build helper tool where goodies will be implemented. It is trying to bring some of the concepts from Maven other platforms.
 
+- Turtle file
 - [Turtle and GO](#Turtle and Go)
 
+## Turtle file
+
+Turtle file a the project definition file used by turtle to define properties of the project as well as packaging, builds,
+
+```
+{
+  "group-id": "io.correia",
+  "artifact-id": "turtle",
+  "name": "turtle",
+  "version": "0.0.1-SNAPSHOT",
+  "packaging": "tar.gz",
+  "generate-pom": false,
+  "project-type": "go",
+  "repositories": [
+      {
+        "id": "mu-nexus-repo",
+        "type": "nexus",
+        "build-type": "snapshots",
+        "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/snapshots"
+      },
+      {
+        "id": "my-nexus-repo",
+        "type": "nexus",
+        "build-type": "releases",
+        "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/releases"
+      }
+    ],
+  "builds": [
+    {
+      "OS": "darwin",
+      "Arch": "amd64"
+    },
+    {
+      "OS": "linux",
+      "Arch": "amd64"
+    },
+    {
+      "OS": "windows",
+      "Arch": "amd64"
+    }
+  ]
+}
+```
 ## Turtle and Go
 
-Turtle offers a wrapper for gb https://getgb.io
+Turtle started and a Golang helper tool and started the shifting into a more generic and smarter build helper.
+It offers a wrapper for gb https://getgb.io. Other Go build tool might be integrated but for the moment only gb is available.
 
 gb is an awesome tool for Golang projects and provides features like:
 - Project based workflow
