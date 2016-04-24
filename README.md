@@ -34,7 +34,7 @@ For a project as below it will generate the following:
 - turtle-linux-amd64-0.0.1-SNAPSHOT.tar.gz
 - turtle-windows-amd64-0.0.1-SNAPSHOT.tar.gz
 
-####Project Definition
+Project Definition
 ```
 {
   "group-id": "io.correia",
@@ -46,7 +46,8 @@ For a project as below it will generate the following:
   "project-type": "go",
   ...
 ```
-####Builds
+
+Builds
 ```
 ...
   "builds": [
