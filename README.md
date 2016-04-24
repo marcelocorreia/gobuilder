@@ -1,9 +1,30 @@
-# Turtle - Build Helper
+# Turtle
 
-Turtle is a build helper tool where goodies will be implemented. It is trying to bring some of the concepts from Maven other platforms.
-
+- [About Turtle](#About Turtle)
 - [Turtle file](#Turtle file)
 - [Turtle and GO](#Turtle and Go)
+- [Packing Stuff with Turtle](#Packing Stuff with Turtle)
+- [Deploying Stuff with Turtle](#Deploying Stuff with Turtle)
+- [Project Types](#Project Types)
+
+##About Turtle
+Turtle is a build and deployment helper tool where goodies will be implemented in a turtle pace.
+It is trying to bring some of the concepts from Maven other platforms. Not too ambitious just filling a gap on BAU operations.
+
+
+## Project Types
+Currently Turtle supports two project types.
+- Go Projects (via gb wrapper)
+- Generic static projects, some different projecys might fit under this category
+
+##Packing Stuff with Turtle
+
+###GO builds
+
+
+
+## Deploying Stuff with Turtle
+
 
 ## Turtle file
 
@@ -20,7 +41,7 @@ Turtle file is the project definition used by turtle to define properties of the
   "project-type": "go",
   "repositories": [
       {
-        "id": "mu-nexus-repo",
+        "id": "my-nexus-repo",
         "type": "nexus",
         "build-type": "snapshots",
         "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/snapshots"

@@ -30,8 +30,11 @@ var (
 	app = kingpin.New("turtle", "turtle - build, test, deploy, release, install build tools.")
 
 	projectPath = kingpin.Flag("path", "Go project path").Default(".").String()
+
 	batchMode = kingpin.Flag("batch", "Runs commands without asking for any input").Bool()
+
 	buildCommand = kingpin.Command("build", "Runs commands without asking for any input")
+
 	cleanCommand = kingpin.Command("clean", "Cleans all packages and binaries")
 
 	deployToCommand = kingpin.Command("deploy", "Runs commands without asking for any input")
@@ -40,7 +43,7 @@ var (
 	deployToNexusGeneratePom = deployToCommand.Flag("generate-pom", "Generate POM").Short('g').Default("true").String()
 	deployToNexusFile = deployToCommand.Flag("file", "Package to Deploy").Short('f').Required().String()
 
-	deployToServer = deployToCommand.Command("server", "Deploy to Server")
+	//deployToServer = deployToCommand.Command("server", "Deploy to Server")
 
 	distCommand = kingpin.Command("dist", "Creates distribution package")
 
@@ -51,7 +54,6 @@ var (
 	releaseCommand = kingpin.Command("release", "Performs SCM release.")
 
 	versionCommand = kingpin.Command("version", "Version")
-	//EE = versionCommand.Flag("ee", "??").Bool()
 )
 
 func init() {
