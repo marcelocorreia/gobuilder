@@ -10,9 +10,9 @@ import (
 )
 
 var (
-	STARK_FILE string
-	STARK_HOME string
-	STARK_VERSION = "0.0.1-SNAPSHOT"
+	TURTLE_FILE string
+	TURTLE_HOME string
+	TURTLE_VERSION = "0.0.1-SNAPSHOT"
 	rt = utils.RuntimeHelper{}
 	logger = logd.GetLogger()
 	wiz = utils.Wizard{}
@@ -23,9 +23,9 @@ var (
 )
 
 var (
-	app = kingpin.New("stark", "stark - build, test, deploy, release, install build tools.")
+	app = kingpin.New("turtle", "turtle - build, test, deploy, release, install build tools.")
 
-	STARK_PROJECT_PATH = kingpin.Flag("path", "Go project path").Default(".").String()
+	TURTLE_PROJECT_PATH = kingpin.Flag("path", "Go project path").Default(".").String()
 	batchMode = kingpin.Flag("batch", "Runs commands without asking for any input").Bool()
 	buildCommand = kingpin.Command("build", "Runs commands without asking for any input")
 	cleanCommand = kingpin.Command("clean", "Cleans all packages and binaries")
@@ -47,20 +47,21 @@ var (
 	releaseCommand = kingpin.Command("release", "Performs SCM release.")
 
 	versionCommand = kingpin.Command("version", "Version")
-	EE = versionCommand.Flag("ee", "??").Bool()
+	//EE = versionCommand.Flag("ee", "??").Bool()
+	wtfCMD = kingpin.Command("wtf","WTF??")
 )
 
 func init() {
 	kingpin.CommandLine.HelpFlag.Short('h')
-	STARK_HOME = os.Getenv("HOME") + app.Name
-	STARK_FILE = *STARK_PROJECT_PATH + "/stark.json"
+	TURTLE_HOME = os.Getenv("HOME") + app.Name
+	TURTLE_FILE = *TURTLE_PROJECT_PATH + "/turtle.json"
 }
 
 func main() {
-	os.Chdir(*STARK_PROJECT_PATH)
+	os.Chdir(*TURTLE_PROJECT_PATH)
 	cmds = kingpin.Parse()
 	app.Version(project.Version)
-	s := Stark{}
+	s := Turtle{}
 
 	s.CheckHome()
 
@@ -82,9 +83,13 @@ func main() {
 	case "release":
 		s.Release()
 	case "version":
-		fmt.Println(app.Name, STARK_VERSION)
-		//if (*EE) {
-		s.EE()
+		fmt.Println(app.Name, TURTLE_VERSION)
+	case"wtf":
+		resp:=wiz.Question("WTF??")
+		fmt.Println(resp,"<---")
+
+	//if (*EE) {
+		//s.EE()
 	//}
 	}
 }

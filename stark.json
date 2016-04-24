@@ -1,7 +1,7 @@
 {
   "group-id": "io.correia",
-  "artifactId": "gobuilder",
-  "name": "gobuilder",
+  "artifactId": "stark",
+  "name": "stark",
   "version": "0.0.1-SNAPSHOT",
   "file": "",
   "packaging": "tar.gz",
