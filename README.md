@@ -1,11 +1,11 @@
 # Turtle
 
-- [About Turtle](#About Turtle)
-- [Turtle file](#Turtle file)
-- [Turtle and GO](#Turtle and Go)
-- [Packing Stuff with Turtle](#Packing Stuff with Turtle)
-- [Deploying Stuff with Turtle](#Deploying Stuff with Turtle)
-- [Project Types](#Project Types)
+- [About Turtle](#about-turtle)
+- [Turtle file](#turtle-file)
+- [Turtle and GO](#turtle-and-Go)
+- [Packing Stuff with Turtle](#packing-stuff-with-turtle)
+- [Deploying Stuff with Turtle](#seploying-stuff-with-turtle)
+- [Project Types](#project-types)
 
 ##About Turtle
 Turtle is a build and deployment helper tool where goodies will be implemented in a turtle pace.
