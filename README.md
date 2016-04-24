@@ -14,8 +14,11 @@ It is trying to bring some of the concepts from Maven other platforms. Not too a
 
 ## Project Types
 Currently Turtle supports two project types.
-- Go Projects (via gb wrapper)
-- Generic static projects, some different projecys might fit under this category
+- [x] Go Projects (via gb wrapper)
+- [x] AngularJS Apps
+- Generic static projects, some different projects fit under this category. Been using for
+    - [x] AngularJS apps
+    - [Terraform](https://terraform.io) templates
 
 ##Packing Stuff with Turtle
 
