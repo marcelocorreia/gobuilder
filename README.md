@@ -34,8 +34,9 @@ For a project as below it will generate the following:
 - turtle-linux-amd64-0.0.1-SNAPSHOT.tar.gz
 - turtle-windows-amd64-0.0.1-SNAPSHOT.tar.gz
 
-Project Definition
+
 ```
+# Project Section
 {
   "group-id": "io.correia",
   "artifact-id": "turtle",
@@ -47,8 +48,8 @@ Project Definition
   ...
 ```
 
-Builds
 ```
+# Builds Section
 ...
   "builds": [
     {
@@ -71,7 +72,33 @@ Builds
 
 ## Deploying Stuff with Turtle
 
+Supported Schemes
+- [x] Sonatype Nexus
+- [ ] Git
+- [x] SSH
 
+Deploying to Nexus
+Repositories are defined in the turtle file.
+//TODO: Auth
+
+```
+ "repositories": [
+      {
+        "id": "my-nexus-repo",
+        "type": "nexus",
+        "build-type": "snapshots",
+        "url": "http://my-nexus:8081/nexus/content/repositories/snapshots"
+      },
+      {
+        "id": "my-nexus-repo",
+        "type": "nexus",
+        "build-type": "releases",
+        "url": "http://my-nexus:8081/nexus/content/repositories/releases"
+      }
+    ],
+```
+
+Run
 ## Turtle file
 
 Turtle file is the project definition used by turtle to define properties of the project as well as packaging, builds,
