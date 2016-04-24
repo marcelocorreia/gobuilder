@@ -24,7 +24,49 @@ Currently Turtle supports two project types.
 
 ###GO builds
 
+Turtle generates packages tarball packages using the definitions in turtle.json
 
+It creates one package per definition as below, using a name convention similar to Maven style.
+
+Example:
+For a project as below it will generate the following:
+- turtle-darwin-amd64-0.0.1-SNAPSHOT.tar.gz
+- turtle-linux-amd64-0.0.1-SNAPSHOT.tar.gz
+- turtle-windows-amd64-0.0.1-SNAPSHOT.tar.gz
+
+####Project Definition
+```
+{
+  "group-id": "io.correia",
+  "artifact-id": "turtle",
+  "name": "turtle",
+  "version": "0.0.1-SNAPSHOT",
+  "packaging": "tar.gz",
+  "generate-pom": false,
+  "project-type": "go",
+  ...
+```
+####Builds
+```
+...
+  "builds": [
+    {
+      "OS": "darwin",
+      "Arch": "amd64"
+    },
+    {
+      "OS": "linux",
+      "Arch": "amd64"
+    },
+    {
+      "OS": "windows",
+      "Arch": "amd64"
+    }
+  ]
+...
+
+```
+> NOTE: However packaging is present in the Turtle file, ONLY .tar.gz is supported at the moment.
 
 ## Deploying Stuff with Turtle
 
@@ -47,13 +89,13 @@ Turtle file is the project definition used by turtle to define properties of the
         "id": "my-nexus-repo",
         "type": "nexus",
         "build-type": "snapshots",
-        "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/snapshots"
+        "url": "http://my-nexus:8081/nexus/content/repositories/snapshots"
       },
       {
         "id": "my-nexus-repo",
         "type": "nexus",
         "build-type": "releases",
-        "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/releases"
+        "url": "http://my-nexus:8081/nexus/content/repositories/releases"
       }
     ],
   "builds": [
