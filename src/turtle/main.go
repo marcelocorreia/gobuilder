@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"model"
 	"os"
-	"github.com/correia-io/goutils/src/utils"
-	"github.com/correia-io/goutils/src/logd"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os/signal"
 	"syscall"
 	"github.com/daviddengcn/go-colortext"
+	"github.com/correia-io/goutils/src/utils"
+	"github.com/correia-io/goutils/src/logd"
+	"model"
+	"plugin"
 )
 
 var (
@@ -24,6 +25,7 @@ var (
 	project model.Project
 	fileUtils = utils.FileUtils{}
 	cmds string
+	goBuilder  plugin.GoBuilder
 )
 
 var (
@@ -83,8 +85,9 @@ func main() {
 	fmt.Println("Turtle project file:" + TURTLE_FILE)
 	project = s.GetProject()
 	app.Version(project.Version)
-	s.CheckHome()
 
+	s.CheckHome()
+	goBuilder = plugin.GoBuilder{Project:project}
 	switch cmds {
 	case "build":
 		s.Build()

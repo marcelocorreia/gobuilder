@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"model"
 	"github.com/pborman/uuid"
-	"github.com/daviddengcn/go-colortext"
 	"strings"
 )
 
@@ -40,6 +39,17 @@ func (s Turtle) Clean() {
 	os.RemoveAll(TURTLE_PROJECT_PATH + "dist")
 	os.RemoveAll(TURTLE_PROJECT_PATH + "pkg")
 	os.RemoveAll(TURTLE_PROJECT_PATH + "bin")
+	files, err := ioutil.ReadDir(".")
+	if err != nil {
+		logger.Error(err)
+		os.Exit(1)
+	}
+	for _, file := range files {
+		if strings.HasSuffix(file.Name(), "tar.gz") {
+			fmt.Printf("Removing file:%s\n", file.Name())
+			os.Remove(file.Name())
+		}
+	}
 }
 
 func (s Turtle) CheckHome() {
@@ -109,38 +119,39 @@ func (s Turtle) CheckHome() {
 
 func (s Turtle) Dist() {
 	if (project.ProjectType == "go") {
-		for _, build := range project.Builds {
-			packBase := fmt.Sprintf("%s-%s-%s-%s", project.ArtifactId, build.OS, build.Arch, project.Version)
-			pack := fmt.Sprintf("%s.%s", packBase, project.Packaging)
-			os.Setenv("GOOS", build.OS)
-			os.Setenv("GOARCH", build.Arch)
-			ct.Foreground(ct.Cyan, true)
-			fmt.Println("Building: ", packBase)
-			ct.Foreground(ct.Green, false)
-			s.Build()
-			ct.Foreground(ct.Cyan, true)
-			fmt.Println("Generating package:", pack)
-			ct.Foreground(ct.Green, false)
-			files, err := ioutil.ReadDir("./bin")
-			if err != nil {
-				logger.Error(err, "Error searching for binaries. ")
-				ct.Foreground(ct.Red,false)
-				fmt.Println("Perhaps the project might not generate an executable")
-				fmt.Println("If you think is a good idea to create package for libraries only, please contact the author or send a pull request at https://github.com/marcelocorreia/turtle")
-				ct.Foreground(ct.White,false)
-				os.Exit(1)
-			}
-
-			for _, file := range files {
-				fmt.Println("Renaming:", file.Name())
-				rpl := fmt.Sprintf("-%s-%s", build.OS, build.Arch)
-				os.Rename("bin/" + file.Name(), "dist/" + strings.Replace(file.Name(), rpl, "", -1))
-			}
-			fileUtils.CopyFile("README.md","dist/README.md")
-			fileUtils.CopyFile("turtle.json","dist/turtle.json")
-
-			compressor.Tar("dist/", pack)
-		}
+		goBuilder.Dist()
+		//for _, build := range project.Builds {
+		//	packBase := fmt.Sprintf("%s-%s-%s-%s", project.ArtifactId, build.OS, build.Arch, project.Version)
+		//	pack := fmt.Sprintf("%s.%s", packBase, project.Packaging)
+		//	os.Setenv("GOOS", build.OS)
+		//	os.Setenv("GOARCH", build.Arch)
+		//	ct.Foreground(ct.Cyan, true)
+		//	fmt.Println("Building: ", packBase)
+		//	ct.Foreground(ct.Green, false)
+		//	s.Build()
+		//	ct.Foreground(ct.Cyan, true)
+		//	fmt.Println("Generating package:", pack)
+		//	ct.Foreground(ct.Green, false)
+		//	files, err := ioutil.ReadDir("./bin")
+		//	if err != nil {
+		//		logger.Error(err, "Error searching for binaries. ")
+		//		ct.Foreground(ct.Red,false)
+		//		fmt.Println("Perhaps the project might not generate an executable")
+		//		fmt.Println("If you think is a good idea to create package for libraries only, please contact the author or send a pull request at https://github.com/marcelocorreia/turtle")
+		//		ct.Foreground(ct.White,false)
+		//		os.Exit(1)
+		//	}
+		//
+		//	for _, file := range files {
+		//		fmt.Println("Renaming:", file.Name())
+		//		rpl := fmt.Sprintf("-%s-%s", build.OS, build.Arch)
+		//		os.Rename("bin/" + file.Name(), "dist/" + strings.Replace(file.Name(), rpl, "", -1))
+		//	}
+		//	fileUtils.CopyFile("README.md","dist/README.md")
+		//	fileUtils.CopyFile("turtle.json","dist/turtle.json")
+		//
+		//	compressor.Tar("dist/", pack)
+		//}
 	} else if project.ProjectType == "static" {
 		fmt.Println("Packaging Static Project")
 		tmpDir := "/tmp/" + uuid.New()
