@@ -7,7 +7,7 @@ Turtle is a build helper tool where goodies will be implemented. It is trying to
 
 ## Turtle file
 
-Turtle file a the project definition file used by turtle to define properties of the project as well as packaging, builds,
+Turtle file is the project definition used by turtle to define properties of the project as well as packaging, builds,
 
 ```
 {
