@@ -6,20 +6,7 @@
   "packaging": "tar.gz",
   "generate-pom": false,
   "project-type": "go",
-  "repositories": [
-    {
-      "id": "bp-product",
-      "type": "nexus",
-      "build-type": "snapshots",
-      "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/snapshots"
-    },
-    {
-      "id": "bp-product",
-      "type": "releases",
-      "build-type": "releases",
-      "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/releases"
-    }
-  ],
+  "repositories": [],
   "builds": [
     {
       "id": "darwin",
