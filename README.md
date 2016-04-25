@@ -19,6 +19,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 - Helper tool writen in go to make devs and devops life easier.
 - Constant development atm. (Things my change quickly).
 - Bunch of helpers
+
 #### Golang
 - [x] Dependency management - via [gb](https://getgb.io)
     - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far. but with Go 1.6+ out, it might be a good idea to explore what's around
