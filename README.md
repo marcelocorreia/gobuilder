@@ -33,6 +33,22 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
         - [ ] [Hashicorp](http://www.hashicorp.com) stuff
         - [ ] [Ansible](http://www.ansible.org) stuff
 
+    - CI / SCM Tools & helpers
+        - [ ] SCM Release
+
+    - Integration with cool toys
+        - [ ] Hashicorp Ecosystem
+            - [ ] [Consul](https://consul.io)
+            - [ ] [Packer](https://packer.io)
+            - [ ] [Vault](https://vaultproject.io)
+            - [ ] [Nomad](https://nomadproject.io)
+            - [ ] [Otto](https://ottoproject.io)
+            - [ ] [Vagrant](https://vagrantup.com)
+        - [ ] [Ansible](http://www.ansible.org)
+        - [ ] [Docker](http://docker.io)
+        - [ ] [Docker Compose](http://docker.io)
+        - [ ] [Docker Swarm](http://docker.io)
+
 ## Project Types
 Currently Turtle supports two project types.
 - [x] Go Projects (via gb wrapper)
