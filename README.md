@@ -1,5 +1,6 @@
 # Turtle
 
+- [TL;DR](#tldr)
 - [About Turtle](#about-turtle)
 - [Turtle file](#turtle-file)
 - [Turtle and GO](#turtle-and-Go)
