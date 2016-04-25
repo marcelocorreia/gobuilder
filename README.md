@@ -28,8 +28,8 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
     - [x] gb test helper
 
 #### Packaging
-    - [x] Distribution packaging
-      - [x] Type tar.gz based on [Turtle File](#full-turtle-file)
+- [x] Distribution packaging
+  - [x] Type tar.gz based on [Turtle File](#full-turtle-file)
 
 #### Installers
  - [x] install [gb](https://getgb.io)
