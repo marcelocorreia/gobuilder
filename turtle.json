@@ -6,25 +6,38 @@
   "packaging": "tar.gz",
   "generate-pom": false,
   "project-type": "go",
-  "repositories": [],
+  "repositories": [
+    {
+      "id": "bp-product",
+      "type": "nexus",
+      "build-type": "snapshots",
+      "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/snapshots"
+    },
+    {
+      "id": "bp-product",
+      "type": "releases",
+      "build-type": "releases",
+      "url": "http://pc-mgmt01.products.bulletproof.net:8081/nexus/content/repositories/releases"
+    }
+  ],
   "builds": [
     {
-      "ID": "darwin",
-      "Type": "go",
-      "OS": "darwin",
-      "Arch": "amd64"
+      "id": "darwin",
+      "type": "go",
+      "os": "darwin",
+      "arch": "amd64"
     },
     {
-      "ID": "linux",
-      "Type": "go",
-      "OS": "linux",
-      "Arch": "amd64"
+      "id": "linux",
+      "type": "go",
+      "os": "linux",
+      "arch": "amd64"
     },
     {
-      "ID": "windows",
-      "Type": "go",
-      "OS": "windows",
-      "Arch": "amd64"
+      "id": "windows",
+      "type": "go",
+      "os": "windows",
+      "arch": "amd64"
     }
   ]
 }

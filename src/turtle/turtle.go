@@ -10,6 +10,7 @@ import (
 	"github.com/pborman/uuid"
 	"strings"
 	"github.com/correia-io/goutils/src/utils"
+	"github.com/daviddengcn/go-colortext"
 )
 
 type Tortuga interface {
@@ -25,8 +26,8 @@ type Tortuga interface {
 	RunTests()
 }
 
-type Turtle struct{
-	Config  model.TurtleConfig
+type Turtle struct {
+	Config model.TurtleConfig
 }
 
 func (s Turtle) Build() {
@@ -175,9 +176,13 @@ func (s Turtle) Deploy2Nexus(builds []string) {
 		project := s.GetProject()
 		var jobRepo model.Repository
 		fmt.Println("Starting Deployment to Nexus Jobs:", builds)
-
+		fmt.Println(project)
+		wiz.Question("che cazzo??-->>>")
 		for _, build := range project.Builds {
 			if utils.StringInSlice(build.ID, builds) {
+				ct.Foreground(ct.Cyan, true)
+				fmt.Println("Running build: ", build.ID)
+				ct.Foreground(ct.Green, false)
 				for _, rp := range s.Config.Repositories {
 					if rp.Id == *deployToNexusRepId {
 						jobRepo = rp
@@ -205,6 +210,7 @@ func (s Turtle) Deploy2Nexus(builds []string) {
 					"-DgeneratePom=" + *deployToNexusGeneratePom,
 					"-DrepositoryId=" + jobRepo.Id,
 				}
+				fmt.Println(args)
 				err := rt.RunCommandLogStream("mvn", args)
 				if err != nil {
 					logger.Fatal(err)
@@ -214,7 +220,22 @@ func (s Turtle) Deploy2Nexus(builds []string) {
 
 	}
 }
+type repoError struct {
+	s string
+}
 
+func (e *repoError) Error() string {
+	return e.s
+}
+
+func (t Turtle) getRepo(id string) (model.Repository, error) {
+	for _, r := range project.Repositories {
+		if r.Id == strings.TrimSpace(id) {
+			return r, nil
+		}
+	}
+	return model.Repository{}, &repoError{"Repository not found"}
+}
 func (s Turtle) GetProject() (model.Project) {
 	projectFile, err := ioutil.ReadFile(TURTLE_FILE)
 	var project model.Project

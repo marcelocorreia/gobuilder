@@ -277,7 +277,7 @@ Turtle file is the project definition used by turtle to define properties of the
 
 ## Turtle and Go
 
-Turtle started and a Golang helper tool and started the shifting into a more generic and smarter build helper.
+Turtle started as Golang helper tool and quickly started shifting into a more generic and smarter build helper.
 It offers a wrapper for gb https://getgb.io. Other Go build tool might be integrated but for the moment only gb is available.
 
 gb is an awesome tool for Golang projects and provides features like:
