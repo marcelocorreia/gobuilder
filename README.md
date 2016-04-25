@@ -86,7 +86,7 @@ Currently Turtle supports two project types.
 
 ###GO builds
 
-Turtle generates packages tarball packages using the definitions in turtle.json
+Turtle generates tarball packages using the definitions in [turtle.json](#full-turtle-file)
 
 It creates one package per definition in [Turtle File](#full-turtle-file), using a name convention similar to Maven style.
 
