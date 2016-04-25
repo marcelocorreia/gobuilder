@@ -51,6 +51,14 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 #### CI / SCM Tools & helpers
 - [ ] SCM Release
 
+#### Deployment Tools & helpers
+- [x] [Sonatype Nexus](http://www.sonatype.org/nexus/) deployment
+- [ ] [Github](http://www.github.com) deployment
+- [ ] Git deployment
+- [ ] SSH deployment
+- [ ] Docker deployment
+
+
 #### Integration with cool toys
 - [ ] Hashicorp Ecosystem
     - [ ] [Consul](https://consul.io)
