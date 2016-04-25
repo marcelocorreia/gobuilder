@@ -29,7 +29,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 
 #### Packaging
 - [x] Distribution packaging
-  - [x] Type tar.gz based on [Turtle File](#full-turtle-file)
+  - [x] tar.gz type based on [Turtle File](#full-turtle-file)
 
 #### Installers
  - [x] install [gb](https://getgb.io)
@@ -100,10 +100,13 @@ Deployment type available and roadmap
 
 Deployment Commands and subcommands Available
 - [x] [Sonatype Nexus](http://www.sonatype.org/nexus/)
-    - deploy2
-        - nexus -> Deploys artifact to [Sonatype Nexus](http://www.sonatype.org/nexus/)
+    - deploy2 nexus - Deploys artifact to [Sonatype Nexus](http://www.sonatype.org/nexus/)
+- [ ] Git
+    - [ ] deploy2 git - Deploys artifact to [Github](http://github.com)
+    - [ ] deploy2 github - Deploys artifact to [Github](http://github.com)
+    - [ ] deploy2 gitblit - Deploys artifact to [Gitblit](http://gitblit.com)
 
-##### Help
+##### Help deploy2 nexus
 ```
 $:> turtle deploy2 nexus -h
 usage: turtle deploy2 nexus
@@ -119,10 +122,7 @@ Flags:
   -f, --file=FILE            Package to Deploy
 ```
 
-- [ ] Git
-    - [ ] [Github](http://github.com)
-        - deploy2
-            - github -> Deploys artifact to [Github](http://github.com)
+
 
 #### About [Sonatype Nexus](http://www.sonatype.org/nexus/)
 Nexus Repository Manager and Nexus Repository Manager OSS manage software components required for development, deployment, and provisioning. If you develop software, the repository manager can help you share those components with other developers and end users. It greatly simplifies the maintenance of your own internal repositories and access to external repositories. With Nexus Repository Manager and Nexus Repository Manager OSS you can completely control access to, and deployment of, every component in your organization from a single location.
