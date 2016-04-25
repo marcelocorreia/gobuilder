@@ -20,10 +20,14 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 - Constant development atm. (Things my change quickly).
 - Bunch of helpers
     - Golang
-        - [ ] Dependency management - via [gb](https://getgb.io)
-            - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far.
-
-        - [ ] Pa
+        - [x] Dependency management - via [gb](https://getgb.io)
+            - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far. but with 1.6+ might be a good idea to explore what's around
+        - [x] Build helpers
+            - [x] gb build wrapper
+            - [x] gb test helper
+        - Packaging
+            - [x] Distribution packaging
+              - [x] Type tar.gz based on [Turtle File](#full-turtle-file)
     - Installers
         - [x] install [gb](https://getgb.io)
         - [ ] [Hashicorp](http://www.hashicorp.com) stuff
@@ -113,6 +117,46 @@ $:> turtle deploy nexus -f $DIST_FILE
 
 Turtle file is the project definition used by turtle to define properties of the project as well as packaging, builds,
 
+#### Full Turtle File
+```
+{
+  "group-id": "io.correia",
+  "artifact-id": "turtle",
+  "name": "turtle",
+  "version": "0.0.1-SNAPSHOT",
+  "packaging": "tar.gz",
+  "generate-pom": false,
+  "project-type": "go",
+  "repositories": [
+      {
+        "id": "my-nexus-repo",
+        "type": "nexus",
+        "build-type": "snapshots",
+        "url": "http://my-nexus:8081/nexus/content/repositories/snapshots"
+      },
+      {
+        "id": "my-nexus-repo",
+        "type": "nexus",
+        "build-type": "releases",
+        "url": "http://my-nexus:8081/nexus/content/repositories/releases"
+      }
+    ],
+  "builds": [
+    {
+      "OS": "darwin",
+      "Arch": "amd64"
+    },
+    {
+      "OS": "linux",
+      "Arch": "amd64"
+    },
+    {
+      "OS": "windows",
+      "Arch": "amd64"
+    }
+  ]
+}
+```
 
 #### Project Section
 ```
@@ -168,46 +212,7 @@ Turtle file is the project definition used by turtle to define properties of the
     ],
 ```
 
-#### Full Turtle File
-```
-{
-  "group-id": "io.correia",
-  "artifact-id": "turtle",
-  "name": "turtle",
-  "version": "0.0.1-SNAPSHOT",
-  "packaging": "tar.gz",
-  "generate-pom": false,
-  "project-type": "go",
-  "repositories": [
-      {
-        "id": "my-nexus-repo",
-        "type": "nexus",
-        "build-type": "snapshots",
-        "url": "http://my-nexus:8081/nexus/content/repositories/snapshots"
-      },
-      {
-        "id": "my-nexus-repo",
-        "type": "nexus",
-        "build-type": "releases",
-        "url": "http://my-nexus:8081/nexus/content/repositories/releases"
-      }
-    ],
-  "builds": [
-    {
-      "OS": "darwin",
-      "Arch": "amd64"
-    },
-    {
-      "OS": "linux",
-      "Arch": "amd64"
-    },
-    {
-      "OS": "windows",
-      "Arch": "amd64"
-    }
-  ]
-}
-```
+
 ## Turtle and Go
 
 Turtle started and a Golang helper tool and started the shifting into a more generic and smarter build helper.
