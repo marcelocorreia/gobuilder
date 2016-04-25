@@ -23,9 +23,10 @@ Also feel free to fork or send pull requests.
 - [x] Artifact Management via [Sonatype Nexus](http://www.sonatype.org/nexus/)
 - [x] Constant crazy development pace atm. (Things are moving quickly, mess still around).
 - [x] Bunch of helpers
+- [ ] Auto generation of Documentation
 
 #### TODO
-Appart from list below
+Appart from lists below
 
 - [ ] Clean the mess
 - [ ] Unit tests
@@ -68,6 +69,17 @@ Appart from list below
 - [ ] SSH deployment
 - [ ] Docker deployment
 
+#### Documentation generation
+- [ ] Hugo integration
+- [ ] Confluence sync
+- [ ] markdown2confluence integration
+
+#### Account Management
+- [ ] Confluence
+- [ ] Jira
+- [ ] Nexus
+- [ ] Jenkins
+- [ ] SSH
 
 #### Integration with cool toys
 - [ ] Hashicorp Ecosystem
@@ -91,9 +103,9 @@ Currently Turtle supports two project types.
     - [x] AngularJS apps
     - [Terraform](https://terraform.io) templates
 
-##Packing Stuff with Turtle
+## Packing Stuff with Turtle
 
-###GO builds
+### GO builds
 
 Turtle generates tarball packages using the definitions in [turtle.json](#full-turtle-file)
 

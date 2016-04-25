@@ -6,17 +6,23 @@
   "packaging": "tar.gz",
   "generate-pom": false,
   "project-type": "go",
-  "repositories": null,
+  "repositories": [],
   "builds": [
     {
+      "ID": "darwin",
+      "Type": "go",
       "OS": "darwin",
       "Arch": "amd64"
     },
     {
+      "ID": "linux",
+      "Type": "go",
       "OS": "linux",
       "Arch": "amd64"
     },
     {
+      "ID": "windows",
+      "Type": "go",
       "OS": "windows",
       "Arch": "amd64"
     }

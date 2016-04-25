@@ -16,14 +16,14 @@
 		{
 			"importpath": "github.com/correia-io/goutils/src/logd",
 			"repository": "https://github.com/correia-io/goutils",
-			"revision": "c703f66f21bec4a278937a9cd50ba48ffda85f11",
+			"revision": "c3c0d710fcaba0c67c9fa9364aa32523461a194a",
 			"branch": "master",
 			"path": "/src/logd"
 		},
 		{
 			"importpath": "github.com/correia-io/goutils/src/utils",
 			"repository": "https://github.com/correia-io/goutils",
-			"revision": "c703f66f21bec4a278937a9cd50ba48ffda85f11",
+			"revision": "c3c0d710fcaba0c67c9fa9364aa32523461a194a",
 			"branch": "master",
 			"path": "/src/utils"
 		},

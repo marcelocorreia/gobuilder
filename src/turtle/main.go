@@ -11,6 +11,7 @@ import (
 	"github.com/correia-io/goutils/src/logd"
 	"model"
 	"plugin"
+	"strings"
 )
 
 var (
@@ -25,7 +26,7 @@ var (
 	project model.Project
 	fileUtils = utils.FileUtils{}
 	cmds string
-	goBuilder  plugin.GoBuilder
+	goBuilder plugin.GoBuilder
 )
 
 var (
@@ -43,7 +44,8 @@ var (
 	deployToNexus = deployToCommand.Command("nexus", "Deploy to Nexus")
 	deployToNexusRepId = deployToCommand.Flag("repoId", "Repository ID").Required().Short('r').String()
 	deployToNexusGeneratePom = deployToCommand.Flag("generate-pom", "Generate POM").Short('g').Default("true").String()
-	deployToNexusFile = deployToCommand.Flag("file", "Package to Deploy").Short('f').Required().String()
+	deployToNexusFile = deployToCommand.Flag("file", "Package to Deploy").Short('f').String()
+	deploy2NexusBuild = deployToNexus.Flag("build", "List of build ID's to deploy, separeted by commas.").Short('b').String()
 
 	//deployToServer = deployToCommand.Command("server", "Deploy to Server")
 
@@ -94,7 +96,14 @@ func main() {
 	case "clean":
 		s.Clean()
 	case "deploy2 nexus":
-		s.Deploy2Nexus()
+		if *deploy2NexusBuild == "" && *deployToNexusFile == "" {
+			ct.Foreground(ct.Red, true)
+			fmt.Println("Error: You must provide build id list [--builds|-b] or a file to deploy [--file|-f]")
+			ct.Foreground(ct.White, false)
+			os.Exit(1)
+		}
+		builds := []string(strings.Split(*deploy2NexusBuild, ","))
+		s.Deploy2Nexus(builds)
 	case "deploy2 server":
 		fmt.Println("Coming soon...")
 	case "dist":
