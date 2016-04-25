@@ -9,7 +9,7 @@
 
 ##About Turtle
 Turtle is a build and deployment helper tool where goodies will be implemented in a turtle pace.
-It is trying to bring some of the concepts from Maven other platforms. Not too ambitious just filling a gap on BAU operations.
+It is trying to bring some of the concepts from Maven to other platforms. Not too ambitious just filling a gap on BAU operations.
 
 
 ## Project Types
@@ -34,9 +34,14 @@ For a project as below it will generate the following:
 - turtle-linux-amd64-0.0.1-SNAPSHOT.tar.gz
 - turtle-windows-amd64-0.0.1-SNAPSHOT.tar.gz
 
-
+#### #1 Run
 ```
-# Project Section
+$:> turltle dist
+```
+
+### Turtle file definition
+#### Project Section
+```
 {
   "group-id": "io.correia",
   "artifact-id": "turtle",
@@ -48,8 +53,8 @@ For a project as below it will generate the following:
   ...
 ```
 
+#### Builds Section
 ```
-# Builds Section
 ...
   "builds": [
     {
