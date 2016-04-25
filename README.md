@@ -44,9 +44,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
             - [ ] [Nomad](https://nomadproject.io)
             - [ ] [Otto](https://ottoproject.io)
             - [ ] [Vagrant](https://vagrantup.com)
-
         - [ ] [Ansible](http://www.ansible.org)
-
         - [ ] [Docker Family](https://www.docker.com)
             - [ ] [Docker Compose](https://www.docker.com/products/docker-compose)
             - [ ] [Docker Swarm](https://www.docker.com/products/docker-swarm)
