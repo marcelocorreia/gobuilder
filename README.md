@@ -28,7 +28,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
     - [x] gb test helper
 
 #### Packaging
-- [x] Distribution packaging
+- [x] [Distribution packaging](https://github.com/marcelocorreia/turtle#packing-stuff-with-turtle)
   - [x] tar.gz type based on [Turtle File](#full-turtle-file)
 
 #### Installers
