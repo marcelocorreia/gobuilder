@@ -39,7 +39,7 @@ var (
 
 	cleanCommand = kingpin.Command("clean", "Cleans all packages and binaries")
 
-	deployToCommand = kingpin.Command("deploy", "Runs commands without asking for any input")
+	deployToCommand = kingpin.Command("deploy2", "Runs commands without asking for any input")
 	deployToNexus = deployToCommand.Command("nexus", "Deploy to Nexus")
 	deployToNexusRepId = deployToCommand.Flag("repoId", "Repository ID").Required().Short('r').String()
 	deployToNexusGeneratePom = deployToCommand.Flag("generate-pom", "Generate POM").Short('g').Default("true").String()
@@ -93,9 +93,9 @@ func main() {
 		s.Build()
 	case "clean":
 		s.Clean()
-	case "deploy nexus":
+	case "deploy2 nexus":
 		s.Deploy2Nexus()
-	case "deploy server":
+	case "deploy2 server":
 		fmt.Println("Coming soon...")
 	case "dist":
 		s.Dist()

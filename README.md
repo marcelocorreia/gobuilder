@@ -27,7 +27,9 @@ Currently Turtle supports two project types.
 Turtle generates packages tarball packages using the definitions in turtle.json
 
 It creates one package per definition in [Turtle File](#full-turtle-file), using a name convention similar to Maven style.
-The [Build section](#project-section)defines the build packages files to be created
+
+The [Build Section](#project-section) in [Turtle File](#full-turtle-file) defines the build packages files to be created
+
 Example:
 For a project as below it will generate the following:
 - turtle-darwin-amd64-0.0.1-SNAPSHOT.tar.gz
@@ -51,12 +53,24 @@ Supported Schemes
 - [x] SSH
 
 Deploying to Nexus
-Repositories are defined in the turtle file.
-//TODO: Auth
+Repositories are defined in the [Turtle File](#full-turtle-file).
+
+Deployment type available and roadmap
+
+Deployment Commands and subcommands Available
+- [x] [Sonatype Nexus](http://www.sonatype.org/nexus/)
+    - deploy2
+        - nexus -> Deploys artifact to [Sonatype Nexus](http://www.sonatype.org/nexus/)
+- [ ] [Github](http://github.com)
+    - deploy2
+        - github -> Deploys artifact to [Github](http://github.com)
+
+#### About [Sonatype Nexus](http://www.sonatype.org/nexus/)
+Nexus Repository Manager and Nexus Repository Manager OSS manage software components required for development, deployment, and provisioning. If you develop software, the repository manager can help you share those components with other developers and end users. It greatly simplifies the maintenance of your own internal repositories and access to external repositories. With Nexus Repository Manager and Nexus Repository Manager OSS you can completely control access to, and deployment of, every component in your organization from a single location.
 
 
 
-#### Deploy to Sonatype Nexus
+#### Deploy to [Sonatype Nexus](http://www.sonatype.org/nexus/)
 ```
 $:> turtle deploy nexus -f $DIST_FILE
 ```
