@@ -27,7 +27,7 @@ Currently Turtle supports two project types.
 Turtle generates packages tarball packages using the definitions in turtle.json
 
 It creates one package per definition in [Turtle File](#full-turtle-file), using a name convention similar to Maven style.
-The (Build section)[#project-section]defines the build packages files to be created
+The [Build section](#project-section)defines the build packages files to be created
 Example:
 For a project as below it will generate the following:
 - turtle-darwin-amd64-0.0.1-SNAPSHOT.tar.gz
