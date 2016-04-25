@@ -19,36 +19,38 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 - Helper tool writen in go to make devs and devops life easier.
 - Constant development atm. (Things my change quickly).
 - Bunch of helpers
-    - Golang
-        - [x] Dependency management - via [gb](https://getgb.io)
-            - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far. but with Go 1.6+ out, it might be a good idea to explore what's around
-        - [x] Build helpers
-            - [x] gb build wrapper
-            - [x] gb test helper
-        - Packaging
-            - [x] Distribution packaging
-              - [x] Type tar.gz based on [Turtle File](#full-turtle-file)
-    - Installers
-        - [x] install [gb](https://getgb.io)
-        - [ ] [Hashicorp](http://www.hashicorp.com) stuff
-        - [ ] [Ansible](http://www.ansible.org) stuff
+#### Golang
+- [x] Dependency management - via [gb](https://getgb.io)
+    - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far. but with Go 1.6+ out, it might be a good idea to explore what's around
+- [x] Build helpers
+    - [x] gb build wrapper
+    - [x] gb test helper
 
-    - CI / SCM Tools & helpers
-        - [ ] SCM Release
+#### Packaging
+    - [x] Distribution packaging
+      - [x] Type tar.gz based on [Turtle File](#full-turtle-file)
 
-    - ### Integration with cool toys
-        - [ ] Hashicorp Ecosystem
-            - [ ] [Consul](https://consul.io)
-            - [ ] [Packer](https://packer.io)
-            - [ ] [Vault](https://vaultproject.io)
-            - [ ] [Nomad](https://nomadproject.io)
-            - [ ] [Otto](https://ottoproject.io)
-            - [ ] [Vagrant](https://vagrantup.com)
-        - [ ] [Ansible](http://www.ansible.org)
-        - [ ] [Docker Family](https://www.docker.com)
-            - [ ] [Docker Compose](https://www.docker.com/products/docker-compose)
-            - [ ] [Docker Swarm](https://www.docker.com/products/docker-swarm)
-            - [ ] [Docker Registry](https://www.docker.com/products/docker-registry)
+#### Installers
+ - [x] install [gb](https://getgb.io)
+ - [ ] [Hashicorp](http://www.hashicorp.com) stuff
+ - [ ] [Ansible](http://www.ansible.org) stuff
+
+#### CI / SCM Tools & helpers
+- [ ] SCM Release
+
+#### Integration with cool toys
+- [ ] Hashicorp Ecosystem
+    - [ ] [Consul](https://consul.io)
+    - [ ] [Packer](https://packer.io)
+    - [ ] [Vault](https://vaultproject.io)
+    - [ ] [Nomad](https://nomadproject.io)
+    - [ ] [Otto](https://ottoproject.io)
+    - [ ] [Vagrant](https://vagrantup.com)
+- [ ] [Ansible](http://www.ansible.org)
+- [ ] [Docker Family](https://www.docker.com)
+    - [ ] [Docker Compose](https://www.docker.com/products/docker-compose)
+    - [ ] [Docker Swarm](https://www.docker.com/products/docker-swarm)
+    - [ ] [Docker Registry](https://www.docker.com/products/docker-registry)
 
 ## Project Types
 Currently Turtle supports two project types.
