@@ -18,8 +18,9 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 #### Turtle in a nutshell
 - [x] Helper tool writen in go to make devs and devops life easier.
 - [x] Artifact Management via [Sonatype Nexus](http://www.sonatype.org/nexus/)
-- [x] Constant development atm. (Things my change quickly).
+- [x] Constant crazy development pace atm. (Things are moving quickly, mess still around).
 - [x] Bunch of helpers
+- [ ] Clean the mess
 
 #### Project types
 - [x] [Go](https://golang.org)
