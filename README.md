@@ -17,6 +17,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 ### TL;DR
 #### Turtle in a nutshell
 - [x] Helper tool writen in go to make devs and devops life easier.
+- [x] Artifact Management via [Sonatype Nexus](http://www.sonatype.org/nexus/)
 - [x] Constant development atm. (Things my change quickly).
 - [x] Bunch of helpers
 
@@ -26,6 +27,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
     - AngularJS
     - Perl
     - NodeJS Applications
+    - Template projects (ansible, terraform, packer)
 - [ ] NPM Packages
 - [ ] Ruby Gems
 - [ ] Docker Containers
