@@ -26,8 +26,8 @@ Currently Turtle supports two project types.
 
 Turtle generates packages tarball packages using the definitions in turtle.json
 
-It creates one package per definition as below, using a name convention similar to Maven style.
-
+It creates one package per definition in [Turtle File](#full-turtle-file), using a name convention similar to Maven style.
+The (Build section)[#project-section]defines the build packages files to be created
 Example:
 For a project as below it will generate the following:
 - turtle-darwin-amd64-0.0.1-SNAPSHOT.tar.gz
@@ -40,6 +40,31 @@ $:> turtle dist
 ```
 
 ### Turtle file definition
+
+> NOTE: However packaging is present in the Turtle file, ONLY .tar.gz is supported at the moment.
+
+## Deploying Stuff with Turtle
+
+Supported Schemes
+- [x] Sonatype Nexus
+- [ ] Git
+- [x] SSH
+
+Deploying to Nexus
+Repositories are defined in the turtle file.
+//TODO: Auth
+
+
+
+#### Deploy to Sonatype Nexus
+```
+$:> turtle deploy nexus -f $DIST_FILE
+```
+## Turtle file
+
+Turtle file is the project definition used by turtle to define properties of the project as well as packaging, builds,
+
+
 #### Project Section
 ```
 {
@@ -51,11 +76,13 @@ $:> turtle dist
   "generate-pom": false,
   "project-type": "go",
   ...
+}
 ```
 
 #### Builds Section
 ```
-...
+{
+  ...
   "builds": [
     {
       "OS": "darwin",
@@ -70,22 +97,11 @@ $:> turtle dist
       "Arch": "amd64"
     }
   ]
-...
+  ...
+}
 
 ```
-> NOTE: However packaging is present in the Turtle file, ONLY .tar.gz is supported at the moment.
-
-## Deploying Stuff with Turtle
-
-Supported Schemes
-- [x] Sonatype Nexus
-- [ ] Git
-- [x] SSH
-
-Deploying to Nexus
-Repositories are defined in the turtle file.
-//TODO: Auth
-
+#### Repositories Section
 ```
  "repositories": [
       {
@@ -103,14 +119,7 @@ Repositories are defined in the turtle file.
     ],
 ```
 
-#### Deploy to Sonatype Nexus
-```
-$:> turtle deploy nexus -f $DIST_FILE
-```
-## Turtle file
-
-Turtle file is the project definition used by turtle to define properties of the project as well as packaging, builds,
-
+#### Full Turtle File
 ```
 {
   "group-id": "io.correia",
