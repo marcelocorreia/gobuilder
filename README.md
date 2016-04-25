@@ -34,9 +34,9 @@ For a project as below it will generate the following:
 - turtle-linux-amd64-0.0.1-SNAPSHOT.tar.gz
 - turtle-windows-amd64-0.0.1-SNAPSHOT.tar.gz
 
-#### #1 Run
+#### Run
 ```
-$:> turltle dist
+$:> turtle dist
 ```
 
 ### Turtle file definition
@@ -103,7 +103,10 @@ Repositories are defined in the turtle file.
     ],
 ```
 
-Run
+#### Deploy to Sonatype Nexus
+```
+$:> turtle deploy nexus -f $DIST_FILE
+```
 ## Turtle file
 
 Turtle file is the project definition used by turtle to define properties of the project as well as packaging, builds,
