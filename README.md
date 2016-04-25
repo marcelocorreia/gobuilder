@@ -12,7 +12,7 @@
 
 ##About Turtle
 Turtle is a build and deployment helper tool where goodies will be implemented in a turtle pace.
-It is trying to bring some of the concepts from Maven to other platforms. Not too ambitious just filling a gap on BAU operations.
+It is trying to bring some of the concepts from Maven to other platforms and help when possible. Not too ambitious just filling a gap on BAU operations.
 
 ### TL;DR
 #### Turtle in a nutshell
