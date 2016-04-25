@@ -14,6 +14,9 @@
 Turtle is a build and deployment helper tool where goodies will be implemented in a turtle pace.
 It is trying to bring some of the concepts from Maven to other platforms and help when possible. Not too ambitious just filling a gap on BAU operations.
 The name Turtle was picked as the previous name was already taken and the lack of creativity at 3am, make me pick up the first cool animal picture I could find by browsing any random stuff, nothing fancy about it. Besides turtles are cool
+If anyone can bothered to help with ideas for a logo, please don't be shy. Would be cool to give a face to the Turtle. #giveturtleaface
+Also feel free to fork or send pull requests.
+
 ### TL;DR
 #### Turtle in a nutshell
 - [x] Helper tool writen in go to make devs and devops life easier.
