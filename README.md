@@ -36,7 +36,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
     - CI / SCM Tools & helpers
         - [ ] SCM Release
 
-    - Integration with cool toys
+    - ### Integration with cool toys
         - [ ] Hashicorp Ecosystem
             - [ ] [Consul](https://consul.io)
             - [ ] [Packer](https://packer.io)
