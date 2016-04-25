@@ -21,7 +21,7 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 - Bunch of helpers
     - Golang
         - [x] Dependency management - via [gb](https://getgb.io)
-            - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far. but with 1.6+ might be a good idea to explore what's around
+            - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far. but with Go 1.6+ out, it might be a good idea to explore what's around
         - [x] Build helpers
             - [x] gb build wrapper
             - [x] gb test helper
