@@ -286,7 +286,7 @@ gb is an awesome tool for Golang projects and provides features like:
 - Dependency management
 - Test run
 
-gb is an alternative build tool for the [Go programming language](https://golang.org/).
+An alternative build tool for the [Go programming language](https://golang.org/).
 
 [Read more about the rationale for gb](https://getgb.io/rationale).
 
