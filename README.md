@@ -4,8 +4,8 @@
 - [About Turtle](#about-turtle)
 - [Turtle file](#turtle-file)
 - [Turtle and GO](#turtle-and-Go)
-- [Packing Stuff with Turtle](#packing-stuff-with-turtle)
-- [Deploying Stuff with Turtle](#seploying-stuff-with-turtle)
+- [Packing Stuff with Turtle](https://github.com/marcelocorreia/turtle#packing-stuff-with-turtle)
+- [Deploying Stuff with Turtle](https://github.com/marcelocorreia/turtle#deploying-stuff-with-turtle)
 - [Project Types](#project-types)
 
 
