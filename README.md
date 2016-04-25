@@ -20,7 +20,13 @@ The name Turtle was picked as the previous name was already taken and the lack o
 - [x] Artifact Management via [Sonatype Nexus](http://www.sonatype.org/nexus/)
 - [x] Constant crazy development pace atm. (Things are moving quickly, mess still around).
 - [x] Bunch of helpers
+
+#### TODO
+Appart from list below
+
 - [ ] Clean the mess
+- [ ] Unit tests
+
 
 #### Project types
 - [x] [Go](https://golang.org)
