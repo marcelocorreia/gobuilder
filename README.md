@@ -7,10 +7,26 @@
 - [Deploying Stuff with Turtle](#seploying-stuff-with-turtle)
 - [Project Types](#project-types)
 
+
+
 ##About Turtle
 Turtle is a build and deployment helper tool where goodies will be implemented in a turtle pace.
 It is trying to bring some of the concepts from Maven to other platforms. Not too ambitious just filling a gap on BAU operations.
 
+### TL;DR
+#### Turtle in a nutshell
+- Helper tool writen in go to make devs and devops life easier.
+- Constant development atm. (Things my change quickly).
+- Bunch of helpers
+    - Golang
+        - [ ] Dependency management - via [gb](https://getgb.io)
+            - [ ] Other options i.e. ([Glide](https://glide.sh) or some other). gb has done the job well so far.
+
+        - [ ] Pa
+    - Installers
+        - [x] install [gb](https://getgb.io)
+        - [ ] [Hashicorp](http://www.hashicorp.com) stuff
+        - [ ] [Ansible](http://www.ansible.org) stuff
 
 ## Project Types
 Currently Turtle supports two project types.
@@ -61,6 +77,23 @@ Deployment Commands and subcommands Available
 - [x] [Sonatype Nexus](http://www.sonatype.org/nexus/)
     - deploy2
         - nexus -> Deploys artifact to [Sonatype Nexus](http://www.sonatype.org/nexus/)
+
+##### Help
+```
+$:> turtle deploy2 nexus -h
+usage: turtle deploy2 nexus
+
+Deploy to Nexus
+
+Flags:
+  -h, --help                 Show context-sensitive help (also try --help-long and --help-man).
+      --path="."             Go project path
+      --batch                Runs commands without asking for any input
+  -r, --repoId=REPOID        Repository ID
+  -g, --generate-pom="true"  Generate POM
+  -f, --file=FILE            Package to Deploy
+```
+
 - [ ] Git
     - [ ] [Github](http://github.com)
         - deploy2
