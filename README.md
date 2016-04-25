@@ -16,9 +16,19 @@ It is trying to bring some of the concepts from Maven to other platforms. Not to
 
 ### TL;DR
 #### Turtle in a nutshell
-- Helper tool writen in go to make devs and devops life easier.
-- Constant development atm. (Things my change quickly).
-- Bunch of helpers
+- [x] Helper tool writen in go to make devs and devops life easier.
+- [x] Constant development atm. (Things my change quickly).
+- [x] Bunch of helpers
+
+#### Project types
+- [x] [Go](https://golang.org)
+- [x] Static directory based projects
+    - AngularJS
+    - Perl
+    - NodeJS Applications
+- [ ] NPM Packages
+- [ ] Ruby Gems
+- [ ] Docker Containers
 
 #### Golang
 - [x] Dependency management - via [gb](https://getgb.io)
