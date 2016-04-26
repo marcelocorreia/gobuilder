@@ -173,7 +173,11 @@ Nexus Repository Manager and Nexus Repository Manager OSS manage software compon
 
 #### Deploy to [Sonatype Nexus](http://www.sonatype.org/nexus/)
 ```
-$:> turtle deploy nexus -f $DIST_FILE
+$:> turtle deploy nexus -f $DIST_FILE -repoId 
+```
+or
+```
+$:> turtle deploy nexus -b build-id1, build-id2
 ```
 ## Turtle file
 
