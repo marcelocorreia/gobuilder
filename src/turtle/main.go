@@ -20,6 +20,7 @@ var (
 	TURTLE_HOME string
 	TURTLE_VERSION = "0.0.1-SNAPSHOT"
 	TURTLE_PROJECT_PATH string
+	TURTLE_CONFIG_FILE string
 	rt = utils.RuntimeHelper{}
 	logger = logd.GetLogger()
 	wiz = utils.Wizard{}
@@ -86,14 +87,20 @@ func main() {
 	}
 
 	os.Chdir(TURTLE_PROJECT_PATH)
+	if os.Getenv("TURTLE_HOME") != "" {
+		TURTLE_HOME = os.Getenv("TURTLE_HOME")
+	} else {
+		TURTLE_HOME = os.Getenv("HOME") + "/." + app.Name
+	}
 
-	TURTLE_HOME = os.Getenv("HOME") + "/" + app.Name
 	TURTLE_FILE = TURTLE_PROJECT_PATH + "/turtle.json"
 	tt := Turtle{}
 	ct.Foreground(ct.Cyan, false)
 	fmt.Println("Found Turtle file: " + TURTLE_FILE)
 	ct.ResetColor()
 	project = tt.GetProject()
+	TURTLE_CONFIG_FILE = TURTLE_HOME + "/config.json"
+	tt.LoadConfig()
 	app.Version(project.Version)
 
 	tt.CheckHome()

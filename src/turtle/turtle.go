@@ -14,7 +14,6 @@ import (
 )
 
 type Tortuga interface {
-	Build()
 	CheckHome()
 	CheckProjectFile()
 	Clean()
@@ -22,12 +21,55 @@ type Tortuga interface {
 	Dist()
 	GetProject()
 	InstallGB()
+	LoadConfig()
 	Release()
 	RunTests()
+	SaveConfig()
+	Build()
 }
 
 type Turtle struct {
-	Config model.TurtleConfig
+	config model.TurtleConfig
+}
+
+func (t Turtle) SaveConfig() (error) {
+	fileUtils.CopyFile(TURTLE_CONFIG_FILE, TURTLE_CONFIG_FILE + ".backup")
+	cf :=t.LoadConfig()
+	resp, _ := json.MarshalIndent(&cf, "", "  ")
+	wr := []byte(resp)
+	logger.Debug("Writing config file", TURTLE_CONFIG_FILE)
+	err := ioutil.WriteFile(TURTLE_CONFIG_FILE, wr, 0750)
+
+	if (err != nil) {
+		return err
+	}
+
+	return nil
+}
+
+func (t Turtle) LoadConfig() (model.TurtleConfig) {
+	ct.Foreground(ct.Cyan, false)
+	fmt.Println("Loading Turtle config file:", TURTLE_CONFIG_FILE)
+
+	var cfg model.TurtleConfig
+	cFile, err := ioutil.ReadFile(TURTLE_CONFIG_FILE)
+	if err != nil {
+		ct.Foreground(ct.Red, true)
+		logger.Error("Workspace busted", err, TURTLE_FILE)
+		ct.ResetColor()
+	} else {
+		var t model.TurtleConfig
+		err := json.Unmarshal(cFile, &t)
+		if err != nil {
+			logger.Error(err)
+		}
+		cfg = t
+	}
+	ct.ResetColor()
+
+	t.config = cfg
+
+	return cfg
 }
 
 func (t Turtle) Build() {
@@ -59,6 +101,7 @@ func (t Turtle) Clean() {
 func (t Turtle) CheckHome() {
 	if _, err := os.Stat(TURTLE_HOME); os.IsNotExist(err) {
 		os.Mkdir(TURTLE_HOME, 00750)
+
 	}
 }
 
@@ -146,6 +189,11 @@ func (t Turtle) Dist() {
 		ct.ResetColor()
 	} else if (project.ProjectType == "go") {
 		goBuilder.Dist()
+		os.Unsetenv("GOOS")
+		os.Unsetenv("GOARCH")
+		os.RemoveAll("bin/")
+		os.RemoveAll("dist/")
+		t.Build()
 	}
 }
 
@@ -173,76 +221,78 @@ func (t Turtle) RunTests() {
 
 func (t Turtle) Deploy2Nexus(builds []string) {
 	if !rt.CheckBinaryInPath("mvn") {
-		logger.Fatal("Maven not found in PATH, please check your configuration.")
-	} else {
-		project := t.GetProject()
-		var jobRepo model.Repository
-		fmt.Println("Starting Deployment to Nexus Jobs:", builds)
+		ct.Foreground(ct.Red, false)
+		fmt.Println("Maven not found in PATH, please check your configuration.")
+		os.Exit(1)
+	}
+	project := t.GetProject()
+	var jobRepo model.Repository
+	fmt.Println("Starting Deployment to Nexus Jobs:", builds)
 
-		for _, build := range project.Builds {
-			if utils.StringInSlice(build.ID, builds) {
-				ct.Foreground(ct.Cyan, true)
+	for _, build := range project.Builds {
+		if utils.StringInSlice(build.ID, builds) {
+			ct.Foreground(ct.Cyan, true)
 
-				fmt.Println("Running build:", build.Type, build.ID)
+			fmt.Println("Running build:", build.Type, build.ID)
 
-				ct.Foreground(ct.Green, false)
-				for _, rp := range t.Config.Repositories {
-					if rp.Id == *deployToNexusRepoId {
-						jobRepo = rp
-					}
-				}
-
-				// Overrides repositories from Turtle Config
-				for _, rp := range project.Repositories {
-					if rp.Id == *deployToNexusRepoId {
-						jobRepo = rp
-					}
-				}
-				if jobRepo.Type == "releases" && strings.Contains(project.Version, "SNAPSHOT") {
-					ct.Foreground(ct.Red, true)
-					fmt.Println("Error: You are trying to deploy a unreleased package into repository of type\"releases\"")
-					ct.Foreground(ct.Red, false)
-					fmt.Println("Please check your project and try again once sorted.")
-					ct.ResetColor()
-					os.Exit(1)
-				} else if jobRepo.URL == "" {
-					ct.Foreground(ct.Red, true)
-					fmt.Printf("Error: Repository ID -> %s not found in Turtle file\n", *deployToNexusRepoId)
-					ct.Foreground(ct.Red, false)
-					fmt.Println("Please check your project and try again once sorted.")
-					ct.ResetColor()
-					os.Exit(1)
-				}
-				var version string
-
-				if project.ProjectType == "go" {
-					version = fmt.Sprintf("%s-%s-%s", build.OS, build.Arch, project.Version)
-				} else {
-					version = project.Version
-				}
-
-				file := fmt.Sprintf("%s-%s.%s", project.ArtifactId, version, project.Packaging)
-				fmt.Println("Deploying file:", file)
-				args := []string{
-					"deploy:deploy-file",
-					"-DgroupId=" + project.GroupId,
-					"-DartifactId=" + project.ArtifactId,
-					"-Dversion=" + version,
-					"-Dpackaging=" + project.Packaging,
-					"-Durl=" + jobRepo.URL,
-					"-Dfile=" + file,
-					"-DgeneratePom=" + *deployToNexusGeneratePom,
-					"-DrepositoryId=" + jobRepo.Id,
-				}
-				fmt.Println(args)
-				err := rt.RunCommandLogStream("mvn", args)
-				if err != nil {
-					logger.Fatal(err)
+			ct.Foreground(ct.Green, false)
+			for _, rp := range t.LoadConfig().Repositories {
+				if rp.Id == *deployToNexusRepoId {
+					jobRepo = rp
 				}
 			}
-		}
 
+			// Overrides repositories from Turtle Config
+			for _, rp := range project.Repositories {
+				if rp.Id == *deployToNexusRepoId {
+					jobRepo = rp
+				}
+			}
+
+			if jobRepo.Type == "releases" && strings.Contains(project.Version, "SNAPSHOT") {
+				ct.Foreground(ct.Red, true)
+				fmt.Println("Error: You are trying to deploy a unreleased package into repository of type\"releases\"")
+				ct.Foreground(ct.Red, false)
+				fmt.Println("Please check your project and try again once sorted.")
+				ct.ResetColor()
+				os.Exit(1)
+			} else if jobRepo.URL == "" {
+				ct.Foreground(ct.Red, true)
+				fmt.Printf("Error: Repository ID -> %s not found in Turtle file\n", *deployToNexusRepoId)
+				ct.Foreground(ct.Red, false)
+				fmt.Println("Please check your project and try again once sorted.")
+				ct.ResetColor()
+				os.Exit(1)
+			}
+			var version string
+
+			if project.ProjectType == "go" {
+				version = fmt.Sprintf("%s-%s-%s", build.OS, build.Arch, project.Version)
+			} else {
+				version = project.Version
+			}
+
+			file := fmt.Sprintf("%s-%s.%s", project.ArtifactId, version, project.Packaging)
+			fmt.Println("Deploying file:", file)
+			args := []string{
+				"deploy:deploy-file",
+				"-DgroupId=" + project.GroupId,
+				"-DartifactId=" + project.ArtifactId,
+				"-Dversion=" + version,
+				"-Dpackaging=" + project.Packaging,
+				"-Durl=" + jobRepo.URL,
+				"-Dfile=" + file,
+				"-DgeneratePom=" + *deployToNexusGeneratePom,
+				"-DrepositoryId=" + jobRepo.Id,
+			}
+			fmt.Println(args)
+			err := rt.RunCommandLogStream("mvn", args)
+			if err != nil {
+				logger.Fatal(err)
+			}
+		}
 	}
+
 }
 
 type repoError struct {

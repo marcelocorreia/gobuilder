@@ -12,13 +12,8 @@ const (
 )
 
 func TestTurtle(t *testing.T) {
-	p := model.Project{
-		ArtifactId:"artifact-id",
-		GeneratePom:true,
-		Name:"gobuilder-test",
-		GroupId:"test-group",
-		ProjectType:"go",
-		Packaging:"tar.gz",
+	p := model.TurtleConfig{
+
 	}
 	rSnap := model.Repository{
 		Id:"bp-product-snapshots",
@@ -32,23 +27,10 @@ func TestTurtle(t *testing.T) {
 		Type: "releases",
 	}
 
-	bD := model.Build{
-		OS:"darwin",
-		Arch:"amd64",
-	}
 
-	bL := model.Build{
-		OS:"linux",
-		Arch:"amd64",
-	}
-
-	bW := model.Build{
-		OS:"windows",
-		Arch:"amd64",
-	}
 
 	p.Repositories = []model.Repository{rSnap, rRel}
-	p.Builds = []model.Build{bD, bL, bW}
+
 
 	resp, _ := json.MarshalIndent(&p, "", "  ")
 	fmt.Println(string(resp))

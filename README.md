@@ -3,6 +3,7 @@
 - [TL;DR](#tldr)
 - [About Turtle](#about-turtle)
 - [Turtle file](#turtle-file)
+- [Turtle config file](#turtle-config-file)
 - [Turtle and GO](#turtle-and-Go)
 - [Packing Stuff with Turtle](https://github.com/marcelocorreia/turtle#packing-stuff-with-turtle)
 - [Deploying Stuff with Turtle](https://github.com/marcelocorreia/turtle#deploying-stuff-with-turtle)
@@ -179,6 +180,80 @@ or
 ```
 $:> turtle deploy nexus -b build-id1, build-id2
 ```
+
+## Turtle Home
+Turtle needs home, by default it creates his lair at $HOME/.turtle | %HOME%/.turtle
+You can override this by setting the Environment Variable TURTLE_HOME, FROM now this doc will refer it as TURTLE_HOME
+
+## Turtle Config file
+The configuration file is placed at TURTLE_HOME/config.json
+
+So far its only making use of Repositories section.
+
+You can define your repositories in this config and it will be available for all jobs.
+Repositories can be also defined on the [Turtle File](#full-turtle-file) of each job.
+
+> NOTE: Repositories define in the [Turtle File](#full-turtle-file) will override repositories on [Turtle Config File](#turtle-config-file)
+
+
+```
+{
+  "external-apps": [],
+  "accounts": [],
+  "repositories": [
+    {
+      "id": "default",
+      "type": "snapshots",
+      "url": "http://myrepo:8081/nexus/content/repositories/snapshots",
+      "build-type": "snapshots"
+    },
+    {
+      "id": "my-company-releases",
+      "type": "releases",
+      "url": "http://myrepo:8081/nexus/content/repositories/releases",
+      "build-type": "releases"
+    }
+  ]
+}
+```
+
+#### Model Structure.
+```
+type Repository struct {
+	Id        string `json:"id"`
+	Type      string `json:"type"`
+	URL       string `json:"url"`
+	User      string `json:"user,omitempty"`
+	Password  string `json:"password,omitempty"`
+	BuildType string `json:"build-type"`
+}
+
+type TurtleConfig struct {
+	ExternalApps []ExternalApp `json:"external-apps,ommitempty"`
+	Accounts     []Account    `json:"accounts,ommitempty"`
+	Repositories []Repository `json:"repositories,ommitempty"`
+}
+
+type Account struct {
+	Type     string `json:"account-type"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Endpoint string `json:"endpoint,ommitempty"`
+}
+
+type ExternalApp struct {
+	Available           bool     `json:"available"`
+	Executable          string   `json:"executable"`
+	Mandatory           bool     `json:"mandatory"`
+	Name                string   `json:"name"`
+	SupportedVersions   []string `json:"supported-versions"`
+	VersionCheckCommand []string `json:"version-check-command"`
+	DownloadURL         string   `json:"download-url,ommitempty"`
+}
+```
+
+
 ## Turtle file
 
 Turtle file is the project definition used by turtle to define properties of the project as well as packaging, builds,

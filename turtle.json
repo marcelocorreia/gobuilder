@@ -4,7 +4,6 @@
   "name": "turtle",
   "version": "0.0.1-SNAPSHOT",
   "packaging": "tar.gz",
-  "generate-pom": false,
   "project-type": "go",
   "repositories": [],
   "builds": [
