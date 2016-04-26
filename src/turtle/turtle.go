@@ -30,7 +30,7 @@ type Turtle struct {
 	Config model.TurtleConfig
 }
 
-func (s Turtle) Build() {
+func (t Turtle) Build() {
 	logger.Debug("Building go project @", TURTLE_PROJECT_PATH)
 	rt.RunCommandLogStream("gb", []string{"build"})
 	if _, err := os.Stat("dist"); os.IsNotExist(err) {
@@ -38,7 +38,7 @@ func (s Turtle) Build() {
 	}
 }
 
-func (s Turtle) Clean() {
+func (t Turtle) Clean() {
 	fmt.Println("Cleaning the house")
 	os.RemoveAll(TURTLE_PROJECT_PATH + "dist")
 	os.RemoveAll(TURTLE_PROJECT_PATH + "pkg")
@@ -56,7 +56,7 @@ func (s Turtle) Clean() {
 	}
 }
 
-func (s Turtle) CheckHome() {
+func (t Turtle) CheckHome() {
 	if _, err := os.Stat(TURTLE_HOME); os.IsNotExist(err) {
 		os.Mkdir(TURTLE_HOME, 00750)
 	}
@@ -121,11 +121,10 @@ func (s Turtle) CheckHome() {
 //	}
 //}
 
-func (s Turtle) Dist() {
-	if (project.ProjectType == "go") {
-		goBuilder.Dist()
-	} else if project.ProjectType == "static" {
-		fmt.Println("Packaging Static Project")
+func (t Turtle) Dist() {
+	if project.ProjectType == "static" {
+		ct.Foreground(ct.Green, false)
+		fmt.Println("Packaging Static Project", project.ArtifactId)
 		tmpDir := "/tmp/" + uuid.New()
 
 		fmt.Println(os.Getwd())
@@ -138,16 +137,19 @@ func (s Turtle) Dist() {
 			os.Mkdir("dist", 00750)
 		}
 
-		distName := fmt.Sprintf(source + "/dist/%s-%s.%s", project.ArtifactId, project.Version, project.Packaging)
+		distName := fmt.Sprintf(source + "/%s-%s.%s", project.ArtifactId, project.Version, project.Packaging)
 		os.Chdir(tmpDir)
 		fmt.Println(tmpDir)
 		fmt.Println(distName)
 		compressor.Tar(project.ArtifactId, distName)
 		os.RemoveAll(tmpDir)
+		ct.ResetColor()
+	} else if (project.ProjectType == "go") {
+		goBuilder.Dist()
 	}
 }
 
-func (s Turtle) InstallGB() {
+func (t Turtle) InstallGB() {
 	workdir := "/tmp/" + uuid.New()
 	os.Chdir(workdir)
 	os.Setenv("GOPATH", workdir)
@@ -159,7 +161,7 @@ func (s Turtle) InstallGB() {
 	fmt.Println("Done")
 }
 
-func (s Turtle) RunTests() {
+func (t Turtle) RunTests() {
 	dir, err := filepath.Abs(filepath.Dir(TURTLE_PROJECT_PATH))
 	os.Chdir(dir)
 	if err != nil {
@@ -169,34 +171,56 @@ func (s Turtle) RunTests() {
 	rt.RunCommandLogStream("gb", []string{"test"})
 }
 
-func (s Turtle) Deploy2Nexus(builds []string) {
+func (t Turtle) Deploy2Nexus(builds []string) {
 	if !rt.CheckBinaryInPath("mvn") {
 		logger.Fatal("Maven not found in PATH, please check your configuration.")
 	} else {
-		project := s.GetProject()
+		project := t.GetProject()
 		var jobRepo model.Repository
 		fmt.Println("Starting Deployment to Nexus Jobs:", builds)
-		fmt.Println(project)
-		wiz.Question("che cazzo??-->>>")
+
 		for _, build := range project.Builds {
 			if utils.StringInSlice(build.ID, builds) {
 				ct.Foreground(ct.Cyan, true)
-				fmt.Println("Running build: ", build.ID)
+
+				fmt.Println("Running build:", build.Type, build.ID)
+
 				ct.Foreground(ct.Green, false)
-				for _, rp := range s.Config.Repositories {
-					if rp.Id == *deployToNexusRepId {
+				for _, rp := range t.Config.Repositories {
+					if rp.Id == *deployToNexusRepoId {
 						jobRepo = rp
 					}
 				}
 
 				// Overrides repositories from Turtle Config
 				for _, rp := range project.Repositories {
-					if rp.Id == *deployToNexusRepId {
+					if rp.Id == *deployToNexusRepoId {
 						jobRepo = rp
 					}
 				}
+				if jobRepo.Type == "releases" && strings.Contains(project.Version, "SNAPSHOT") {
+					ct.Foreground(ct.Red, true)
+					fmt.Println("Error: You are trying to deploy a unreleased package into repository of type\"releases\"")
+					ct.Foreground(ct.Red, false)
+					fmt.Println("Please check your project and try again once sorted.")
+					ct.ResetColor()
+					os.Exit(1)
+				} else if jobRepo.URL == "" {
+					ct.Foreground(ct.Red, true)
+					fmt.Printf("Error: Repository ID -> %s not found in Turtle file\n", *deployToNexusRepoId)
+					ct.Foreground(ct.Red, false)
+					fmt.Println("Please check your project and try again once sorted.")
+					ct.ResetColor()
+					os.Exit(1)
+				}
+				var version string
 
-				version := fmt.Sprintf("%s-%s-%s", build.OS, build.Arch, project.Version)
+				if project.ProjectType == "go" {
+					version = fmt.Sprintf("%s-%s-%s", build.OS, build.Arch, project.Version)
+				} else {
+					version = project.Version
+				}
+
 				file := fmt.Sprintf("%s-%s.%s", project.ArtifactId, version, project.Packaging)
 				fmt.Println("Deploying file:", file)
 				args := []string{
@@ -220,6 +244,7 @@ func (s Turtle) Deploy2Nexus(builds []string) {
 
 	}
 }
+
 type repoError struct {
 	s string
 }
@@ -236,11 +261,14 @@ func (t Turtle) getRepo(id string) (model.Repository, error) {
 	}
 	return model.Repository{}, &repoError{"Repository not found"}
 }
-func (s Turtle) GetProject() (model.Project) {
+
+func (t Turtle) GetProject() (model.Project) {
 	projectFile, err := ioutil.ReadFile(TURTLE_FILE)
 	var project model.Project
 	if err != nil {
+		ct.Foreground(ct.Red, true)
 		logger.Error("Workspace busted", err, TURTLE_FILE)
+		ct.ResetColor()
 	} else {
 		var c model.Project
 		err := json.Unmarshal(projectFile, &c)
@@ -249,10 +277,10 @@ func (s Turtle) GetProject() (model.Project) {
 		}
 		project = c
 	}
-
+	ct.ResetColor()
 	return project
 }
 
-func (s Turtle) Release() {
+func (t Turtle) Release() {
 	fmt.Println("Releasing project", app.Name, "-", TURTLE_VERSION)
 }

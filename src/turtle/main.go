@@ -12,6 +12,7 @@ import (
 	"model"
 	"plugin"
 	"strings"
+	"path/filepath"
 )
 
 var (
@@ -32,7 +33,7 @@ var (
 var (
 	app = kingpin.New("turtle", "turtle - build, test, deploy, release, install build tools.")
 
-	projectPath = kingpin.Flag("path", "Go project path").Default(".").String()
+	projectPath = kingpin.Flag("path", "Go project path").Short('p').Default(".").String()
 
 	batchMode = kingpin.Flag("batch", "Runs commands without asking for any input").Bool()
 
@@ -42,7 +43,7 @@ var (
 
 	deployToCommand = kingpin.Command("deploy2", "Runs commands without asking for any input")
 	deployToNexus = deployToCommand.Command("nexus", "Deploy to Nexus")
-	deployToNexusRepId = deployToCommand.Flag("repoId", "Repository ID").Required().Short('r').String()
+	deployToNexusRepoId = deployToCommand.Flag("repoId", "Repository ID").Default("default").Short('r').String()
 	deployToNexusGeneratePom = deployToCommand.Flag("generate-pom", "Generate POM").Short('g').Default("true").String()
 	deployToNexusFile = deployToCommand.Flag("file", "Package to Deploy").Short('f').String()
 	deploy2NexusBuild = deployToNexus.Flag("build", "List of build ID's to deploy, separeted by commas.").Short('b').String()
@@ -70,31 +71,38 @@ func main() {
 	signal.Notify(c, syscall.SIGTERM)
 	go func() {
 		<-c
-		ct.Foreground(ct.White, false)
+		ct.ResetColor()
 		fmt.Println("Shutting down gracefully...")
 		defer fmt.Println("Shutdown complete")
 		os.Exit(0)
 	}()
-	os.Chdir(*projectPath)
-	TURTLE_PROJECT_PATH = *projectPath
-	os.Chdir(TURTLE_PROJECT_PATH)
-	cmds = kingpin.Parse()
-	s := Turtle{}
-	fmt.Println("+----------------------------------------------------------+")
 
-	TURTLE_HOME = os.Getenv("HOME") + app.Name
-	TURTLE_FILE = TURTLE_PROJECT_PATH + "./turtle.json"
-	fmt.Println("Turtle project file:" + TURTLE_FILE)
-	project = s.GetProject()
+	cmds = kingpin.Parse()
+
+	TURTLE_PROJECT_PATH, err := filepath.Abs(filepath.Dir(*projectPath + "/"))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	os.Chdir(TURTLE_PROJECT_PATH)
+
+	TURTLE_HOME = os.Getenv("HOME") + "/" + app.Name
+	TURTLE_FILE = TURTLE_PROJECT_PATH + "/turtle.json"
+	tt := Turtle{}
+	ct.Foreground(ct.Cyan, false)
+	fmt.Println("Found Turtle file: " + TURTLE_FILE)
+	ct.ResetColor()
+	project = tt.GetProject()
 	app.Version(project.Version)
 
-	s.CheckHome()
+	tt.CheckHome()
 	goBuilder = plugin.GoBuilder{Project:project}
 	switch cmds {
 	case "build":
-		s.Build()
+		tt.Build()
 	case "clean":
-		s.Clean()
+		tt.Clean()
 	case "deploy2 nexus":
 		if *deploy2NexusBuild == "" && *deployToNexusFile == "" {
 			ct.Foreground(ct.Red, true)
@@ -103,17 +111,17 @@ func main() {
 			os.Exit(1)
 		}
 		builds := []string(strings.Split(*deploy2NexusBuild, ","))
-		s.Deploy2Nexus(builds)
+		tt.Deploy2Nexus(builds)
 	case "deploy2 server":
 		fmt.Println("Coming soon...")
 	case "dist":
-		s.Dist()
+		tt.Dist()
 	case "install gb":
-		s.InstallGB()
+		tt.InstallGB()
 	case "test":
-		s.RunTests()
+		tt.RunTests()
 	case "release":
-		s.Release()
+		tt.Release()
 	case "version":
 		fmt.Println(app.Name, TURTLE_VERSION)
 
@@ -121,5 +129,5 @@ func main() {
 	//s.EE()
 	//}
 	}
-	ct.Foreground(ct.White, false)
+	ct.ResetColor()
 }

@@ -52,7 +52,7 @@ func (s GoBuilder) Dist() error {
 				ct.Foreground(ct.Red, false)
 				fmt.Println("Perhaps the project might not generate an executable")
 				fmt.Println("If you think is a good idea to create package for libraries only, please contact the author or send a pull request at https://github.com/marcelocorreia/turtle")
-				ct.Foreground(ct.White, false)
+				ct.ResetColor()
 				return err
 			}
 
