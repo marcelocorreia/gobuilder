@@ -34,7 +34,7 @@ type Turtle struct {
 
 func (t Turtle) SaveConfig() (error) {
 	fileUtils.CopyFile(TURTLE_CONFIG_FILE, TURTLE_CONFIG_FILE + ".backup")
-	cf :=t.LoadConfig()
+	cf := t.LoadConfig()
 	resp, _ := json.MarshalIndent(&cf, "", "  ")
 	wr := []byte(resp)
 	logger.Debug("Writing config file", TURTLE_CONFIG_FILE)
@@ -49,7 +49,7 @@ func (t Turtle) SaveConfig() (error) {
 
 func (t Turtle) LoadConfig() (model.TurtleConfig) {
 	ct.Foreground(ct.Cyan, false)
-	fmt.Println("Loading Turtle config file:", TURTLE_CONFIG_FILE)
+	//fmt.Println("Loading Turtle config file:", TURTLE_CONFIG_FILE)
 
 	var cfg model.TurtleConfig
 	cFile, err := ioutil.ReadFile(TURTLE_CONFIG_FILE)
@@ -73,11 +73,14 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 }
 
 func (t Turtle) Build() {
-	logger.Debug("Building go project @", TURTLE_PROJECT_PATH)
+	ct.Foreground(ct.Cyan, false)
+	fmt.Println("Building ▶", project.Name + "." + project.Version)
+	ct.Foreground(ct.Green, false)
 	rt.RunCommandLogStream("gb", []string{"build"})
 	if _, err := os.Stat("dist"); os.IsNotExist(err) {
 		os.Mkdir("dist", 00750)
 	}
+	ct.ResetColor()
 }
 
 func (t Turtle) Clean() {

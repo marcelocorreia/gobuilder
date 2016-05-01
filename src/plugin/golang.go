@@ -21,7 +21,6 @@ var (
 )
 
 func (s GoBuilder) Build() error {
-	fmt.Println("Building go project @")
 	err := rt.RunCommandLogStream("gb", []string{"build"})
 	if err != nil {
 		fmt.Println(err)

@@ -66,7 +66,7 @@ func init() {
 	kingpin.CommandLine.HelpFlag.Short('h')
 }
 
-func main() {
+func easyDeath() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	signal.Notify(c, syscall.SIGTERM)
@@ -77,6 +77,10 @@ func main() {
 		defer fmt.Println("Shutdown complete")
 		os.Exit(0)
 	}()
+}
+
+func main() {
+	easyDeath()
 
 	cmds = kingpin.Parse()
 
@@ -96,7 +100,7 @@ func main() {
 	TURTLE_FILE = TURTLE_PROJECT_PATH + "/turtle.json"
 	tt := Turtle{}
 	ct.Foreground(ct.Cyan, false)
-	fmt.Println("Found Turtle file: " + TURTLE_FILE)
+	//fmt.Println("Found Turtle file: " + TURTLE_FILE)
 	ct.ResetColor()
 	project = tt.GetProject()
 	TURTLE_CONFIG_FILE = TURTLE_HOME + "/config.json"
@@ -105,19 +109,28 @@ func main() {
 
 	tt.CheckHome()
 	goBuilder = plugin.GoBuilder{Project:project}
+
 	switch cmds {
 	case "build":
 		tt.Build()
+
 	case "clean":
 		tt.Clean()
 	case "deploy2 nexus":
-		if *deploy2NexusBuild == "" && *deployToNexusFile == "" {
+		var bs string
+		if *deploy2NexusBuild == "" {
+			bs = "default"
+		} else {
+			bs = *deploy2NexusBuild
+		}
+
+		if bs == "" && *deployToNexusFile == "" {
 			ct.Foreground(ct.Red, true)
 			fmt.Println("Error: You must provide build id list [--builds|-b] or a file to deploy [--file|-f]")
 			ct.Foreground(ct.White, false)
 			os.Exit(1)
 		}
-		builds := []string(strings.Split(*deploy2NexusBuild, ","))
+		builds := []string(strings.Split(bs, ","))
 		tt.Deploy2Nexus(builds)
 	case "deploy2 server":
 		fmt.Println("Coming soon...")
