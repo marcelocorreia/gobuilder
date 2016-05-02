@@ -18,7 +18,7 @@ import (
 var (
 	TURTLE_FILE string
 	TURTLE_HOME string
-	TURTLE_VERSION = "0.0.1-SNAPSHOT"
+	TURTLE_VERSION = "1.0.1"
 	TURTLE_PROJECT_PATH string
 	TURTLE_CONFIG_FILE string
 	rt = utils.RuntimeHelper{}

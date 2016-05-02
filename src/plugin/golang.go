@@ -31,7 +31,7 @@ func (s GoBuilder) Build() error {
 	}
 	return nil
 }
-func (s GoBuilder) Dist() error {
+func (s GoBuilder) Dist(project model.Project) error {
 	for _, build := range s.Project.Builds {
 		if build.Type == "go" {
 			packBase := fmt.Sprintf("%s-%s-%s-%s", s.Project.ArtifactId, build.OS, build.Arch, s.Project.Version)
