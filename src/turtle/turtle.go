@@ -168,7 +168,7 @@ func (t Turtle) CheckHome() {
 
 func (t Turtle) Dist() {
 	if project.ProjectType == "static" {
-		dist := project.ArtifactId + "/dist"
+		dist := project.ArtifactId + "-dist"
 		ct.Foreground(ct.Green, false)
 		fmt.Println("Packaging Static Project", project.ArtifactId)
 		tmpDir := "/tmp/" + uuid.New()
