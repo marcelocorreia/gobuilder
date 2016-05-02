@@ -104,10 +104,10 @@ func main() {
 	ct.ResetColor()
 	project = tt.GetProject()
 	TURTLE_CONFIG_FILE = TURTLE_HOME + "/config.json"
+	tt.CheckHome()
 	tt.LoadConfig()
 	app.Version(project.Version)
 
-	tt.CheckHome()
 	goBuilder = plugin.GoBuilder{Project:project}
 
 	switch cmds {

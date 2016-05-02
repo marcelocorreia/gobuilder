@@ -55,7 +55,6 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 	cFile, err := ioutil.ReadFile(TURTLE_CONFIG_FILE)
 	if err != nil {
 		ct.Foreground(ct.Red, true)
-		logger.Error("Workspace busted", err, TURTLE_FILE)
 		ct.ResetColor()
 	} else {
 		var t model.TurtleConfig
@@ -104,7 +103,7 @@ func (t Turtle) Clean() {
 func (t Turtle) CheckHome() {
 	if _, err := os.Stat(TURTLE_HOME); os.IsNotExist(err) {
 		os.Mkdir(TURTLE_HOME, 00750)
-
+		t.SaveConfig()
 	}
 }
 
@@ -201,15 +200,20 @@ func (t Turtle) Dist() {
 }
 
 func (t Turtle) InstallGB() {
+	ct.Foreground(ct.Cyan,false)
+	fmt.Println("Installing GB....")
 	workdir := "/tmp/" + uuid.New()
 	os.Chdir(workdir)
 	os.Setenv("GOPATH", workdir)
 	rt.RunCommandLogStream("go", []string{"get", "github.com/constabulary/gb/..."})
 	fmt.Println("Copying GB binaries to /bin/")
 	rt.RunCommandLogStream("sudo", []string{"cp", workdir + "/bin/gb", "/bin/gb"})
-	rt.RunCommandLogStream("sudo", []string{"cp", workdir + "/bin/gb-vendor", "/bin/gbv-endor"})
+	rt.RunCommandLogStream("sudo", []string{"cp", workdir + "/bin/gb-vendor", "/bin/gb-vendor"})
 	os.RemoveAll(workdir)
-	fmt.Println("Done")
+	ct.Foreground(ct.Green,false)
+	fmt.Println("Done.")
+	ct.ResetColor()
+
 }
 
 func (t Turtle) RunTests() {
