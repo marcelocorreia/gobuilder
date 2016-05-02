@@ -168,6 +168,7 @@ func (t Turtle) CheckHome() {
 
 func (t Turtle) Dist() {
 	if project.ProjectType == "static" {
+		dist := project.ArtifactId + "/dist"
 		ct.Foreground(ct.Green, false)
 		fmt.Println("Packaging Static Project", project.ArtifactId)
 		tmpDir := "/tmp/" + uuid.New()
@@ -177,8 +178,8 @@ func (t Turtle) Dist() {
 
 		fileUtils.CopyDir(source, tmpDir + "/" + project.ArtifactId)
 
-		os.RemoveAll("dist")
-		if e, _ := fileUtils.Exists("dist"); !e {
+		os.RemoveAll(dist)
+		if e, _ := fileUtils.Exists(dist); !e {
 			os.Mkdir("dist", 00750)
 		}
 
@@ -200,7 +201,7 @@ func (t Turtle) Dist() {
 }
 
 func (t Turtle) InstallGB() {
-	ct.Foreground(ct.Cyan,false)
+	ct.Foreground(ct.Cyan, false)
 	fmt.Println("Installing GB....")
 	workdir := "/tmp/" + uuid.New()
 	os.Chdir(workdir)
@@ -210,7 +211,7 @@ func (t Turtle) InstallGB() {
 	rt.RunCommandLogStream("sudo", []string{"cp", workdir + "/bin/gb", "/bin/gb"})
 	rt.RunCommandLogStream("sudo", []string{"cp", workdir + "/bin/gb-vendor", "/bin/gb-vendor"})
 	os.RemoveAll(workdir)
-	ct.Foreground(ct.Green,false)
+	ct.Foreground(ct.Green, false)
 	fmt.Println("Done.")
 	ct.ResetColor()
 
