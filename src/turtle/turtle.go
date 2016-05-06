@@ -76,15 +76,15 @@ func (t Turtle) Build() {
 	fmt.Println("Building ▶", project.Name + "." + project.Version)
 	ct.Foreground(ct.Green, false)
 	rt.RunCommandLogStream("gb", []string{"build"})
-	if _, err := os.Stat("dist"); os.IsNotExist(err) {
-		os.Mkdir("dist", 00750)
+	if _, err := os.Stat(distFolder); os.IsNotExist(err) {
+		os.Mkdir(distFolder, 00750)
 	}
 	ct.ResetColor()
 }
 
 func (t Turtle) Clean() {
 	fmt.Println("Cleaning the house")
-	os.RemoveAll(TURTLE_PROJECT_PATH + "dist")
+	os.RemoveAll(TURTLE_PROJECT_PATH + distFolder)
 	os.RemoveAll(TURTLE_PROJECT_PATH + "pkg")
 	os.RemoveAll(TURTLE_PROJECT_PATH + "bin")
 	files, err := ioutil.ReadDir(".")
@@ -180,7 +180,7 @@ func (t Turtle) Dist() {
 
 		os.RemoveAll(dist)
 		if e, _ := fileUtils.Exists(dist); !e {
-			os.Mkdir("dist", 00750)
+			os.Mkdir(distFolder, 00750)
 		}
 
 		distName := fmt.Sprintf(source + "/%s-%s.%s", project.ArtifactId, project.Version, project.Packaging)
@@ -195,7 +195,7 @@ func (t Turtle) Dist() {
 		os.Unsetenv("GOOS")
 		os.Unsetenv("GOARCH")
 		os.RemoveAll("bin/")
-		os.RemoveAll("dist/")
+		os.RemoveAll(distFolder)
 		t.Build()
 	}
 }

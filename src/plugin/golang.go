@@ -11,7 +11,8 @@ import (
 )
 
 type GoBuilder struct {
-	Project model.Project
+	Project    model.Project
+	DistFolder string
 }
 
 var (
@@ -26,8 +27,8 @@ func (s GoBuilder) Build() error {
 		fmt.Println(err)
 		return err
 	}
-	if _, err := os.Stat("dist"); os.IsNotExist(err) {
-		os.Mkdir("dist", 00750)
+	if _, err := os.Stat(s.DistFolder); os.IsNotExist(err) {
+		os.Mkdir(s.DistFolder, 00750)
 	}
 	return nil
 }
@@ -58,12 +59,13 @@ func (s GoBuilder) Dist(project model.Project) error {
 			for _, file := range files {
 				fmt.Println("Renaming:", file.Name())
 				rpl := fmt.Sprintf("-%s-%s", build.OS, build.Arch)
-				os.Rename("bin/" + file.Name(), "dist/" + strings.Replace(file.Name(), rpl, "", -1))
+				os.Rename("bin/" + file.Name(), s.DistFolder + "/" + strings.Replace(file.Name(), rpl, "", -1))
 			}
-			fileUtils.CopyFile("README.md", "dist/README.md")
-			fileUtils.CopyFile("turtle.json", "dist/turtle.json")
+			fileUtils.CopyFile("README.md", s.DistFolder + "/README.md")
+			fileUtils.CopyFile("turtle.json", s.DistFolder + "/turtle.json")
 
-			compressor.Tar("dist/", pack)
+			compressor.Tar(s.DistFolder + "/", pack)
+			os.RemoveAll("bin/")
 		} else {
 			fmt.Println("Skipping non \"go\" build type:", build.Type)
 		}

@@ -111,7 +111,7 @@ func main() {
 	tt.LoadConfig()
 	app.Version(project.Version)
 
-	goBuilder = plugin.GoBuilder{Project:project}
+	goBuilder = plugin.GoBuilder{Project:project, DistFolder:distFolder}
 
 	switch cmds {
 	case "build":
