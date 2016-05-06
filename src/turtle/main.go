@@ -18,7 +18,7 @@ import (
 var (
 	TURTLE_FILE string
 	TURTLE_HOME string
-	TURTLE_VERSION = "1.1.0-SNAPSHOT"
+	TURTLE_VERSION = "1.1-SNAPSHOT"
 	TURTLE_PROJECT_PATH string
 	TURTLE_CONFIG_FILE string
 	rt = utils.RuntimeHelper{}
@@ -29,6 +29,7 @@ var (
 	fileUtils = utils.FileUtils{}
 	cmds string
 	goBuilder plugin.GoBuilder
+	distFolder string
 )
 
 var (
@@ -64,6 +65,7 @@ var (
 
 func init() {
 	kingpin.CommandLine.HelpFlag.Short('h')
+
 }
 
 func easyDeath() {
@@ -103,6 +105,7 @@ func main() {
 	//fmt.Println("Found Turtle file: " + TURTLE_FILE)
 	ct.ResetColor()
 	project = tt.GetProject()
+	distFolder = project.ArtifactId + "-" + project.Version
 	TURTLE_CONFIG_FILE = TURTLE_HOME + "/config.json"
 	tt.CheckHome()
 	tt.LoadConfig()

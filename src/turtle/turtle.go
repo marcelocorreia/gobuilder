@@ -272,21 +272,21 @@ func (t Turtle) Deploy2Nexus(builds []string) {
 				ct.ResetColor()
 				os.Exit(1)
 			}
-			var version string
+			var artifactId string
 
 			if project.ProjectType == "go" {
-				version = fmt.Sprintf("%s-%s-%s", build.OS, build.Arch, project.Version)
+				artifactId = fmt.Sprintf("%s-%s-%s", project.ArtifactId, build.OS, build.Arch)
 			} else {
-				version = project.Version
+				artifactId = project.Version
 			}
 
-			file := fmt.Sprintf("%s-%s.%s", project.ArtifactId, version, project.Packaging)
+			file := fmt.Sprintf("%s-%s.%s", artifactId, project.Version, project.Packaging)
 			fmt.Println("Deploying file:", file)
 			args := []string{
 				"deploy:deploy-file",
 				"-DgroupId=" + project.GroupId,
-				"-DartifactId=" + project.ArtifactId,
-				"-Dversion=" + version,
+				"-DartifactId=" + artifactId,
+				"-Dversion=" + project.Version,
 				"-Dpackaging=" + project.Packaging,
 				"-Durl=" + jobRepo.URL,
 				"-Dfile=" + file,
