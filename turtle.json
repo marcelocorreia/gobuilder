@@ -2,10 +2,11 @@
   "group-id": "io.correia",
   "artifact-id": "turtle",
   "name": "turtle",
-  "version": "1.1-SNAPSHOT",
+  "version": "1.2-SNAPSHOT",
   "packaging": "tar.gz",
   "project-type": "go",
   "repositories": [],
+  "version-string": "main.VERSION",
   "builds": [
     {
       "id": "darwin",

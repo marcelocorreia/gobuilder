@@ -18,7 +18,6 @@ import (
 var (
 	TURTLE_FILE string
 	TURTLE_HOME string
-	TURTLE_VERSION = "1.1-SNAPSHOT"
 	TURTLE_PROJECT_PATH string
 	TURTLE_CONFIG_FILE string
 	rt = utils.RuntimeHelper{}
@@ -60,6 +59,10 @@ var (
 
 	releaseCommand = kingpin.Command("release", "Performs SCM release.")
 
+	updateCommand = kingpin.Command("update", "Updates lots of different stuff")
+	updateManageVersion = updateCommand.Command("version", "Updates Turtles Managed Version Constant")
+	updateManagedNewVersion = updateManageVersion.Flag("new-version", "New Version to te applied").Short('n').Required().String()
+
 	versionCommand = kingpin.Command("version", "Version")
 )
 
@@ -87,6 +90,7 @@ func main() {
 	cmds = kingpin.Parse()
 
 	TURTLE_PROJECT_PATH, err := filepath.Abs(filepath.Dir(*projectPath + "/"))
+
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -145,8 +149,9 @@ func main() {
 		tt.RunTests()
 	case "release":
 		tt.Release()
+
 	case "version":
-		fmt.Println(app.Name, TURTLE_VERSION)
+		fmt.Println(app.Name, VERSION)
 
 	//if (*EE) {
 	//s.EE()

@@ -1,16 +1,17 @@
 package model
 
 type Project struct {
-	GroupId      string              `json:"group-id"`
-	ArtifactId   string              `json:"artifact-id"`
-	Name         string              `json:"name"`
-	ProjectType  string              `json:"project-type"`
-	Version      string              `json:"version"`
-	File         string              `json:"file"`
-	Packaging    string              `json:"packaging"`
-	GeneratePom  bool                `json:"generate-pom"`
-	Repositories []Repository        `json:"repositories,ommitempty"`
-	Builds       []Build             `json:"builds,ommitempty"`
+	GroupId       string              `json:"group-id"`
+	ArtifactId    string              `json:"artifact-id"`
+	Name          string              `json:"name"`
+	ProjectType   string              `json:"project-type"`
+	Version       string              `json:"version"`
+	File          string              `json:"file,ommitempty"`
+	Packaging     string              `json:"packaging"`
+	GeneratePom   bool                `json:"generate-pom,ommitempty"`
+	Repositories  []Repository        `json:"repositories,ommitempty"`
+	Builds        []Build             `json:"builds,ommitempty"`
+	VersionString string              `json:"version-string,ommitempty"`
 }
 
 type Repository struct {

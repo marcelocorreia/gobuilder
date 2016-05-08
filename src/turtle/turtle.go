@@ -14,6 +14,7 @@ import (
 )
 
 type Tortuga interface {
+	Build()
 	CheckHome()
 	CheckProjectFile()
 	Clean()
@@ -25,7 +26,7 @@ type Tortuga interface {
 	Release()
 	RunTests()
 	SaveConfig()
-	Build()
+	UpdateManagedVersion()
 }
 
 type Turtle struct {
@@ -72,9 +73,13 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 }
 
 func (t Turtle) Build() {
+	p := t.GetProject()
 	ct.Foreground(ct.Cyan, false)
-	fmt.Println("Building ▶", project.Name + "." + project.Version)
+	fmt.Println("Building ▶", p.Name + "." + p.Version)
 	ct.Foreground(ct.Green, false)
+	//flags := "\"-X " + p.VersionString + "=" + p.Version + "\""
+	//fmt.Println(flags)
+
 	rt.RunCommandLogStream("gb", []string{"build"})
 	if _, err := os.Stat(distFolder); os.IsNotExist(err) {
 		os.Mkdir(distFolder, 00750)
@@ -106,65 +111,6 @@ func (t Turtle) CheckHome() {
 		t.SaveConfig()
 	}
 }
-
-//func (s Turtle) CheckProjectFile() {
-//	if _, err := os.Stat(TURTLE_FILE); os.IsNotExist(err) {
-//		ct.Foreground(ct.Red, false)
-//		resp := wiz.Question("Project doesn't have turtle.json file. Would you like to create one? [y/N] ")
-//		project := model.Project{}
-//		project.Version = "0.0.1-SNAPSHOT"
-//		if strings.ToLower(resp) == "y" {
-//			slice := strings.Split(dir, "/")
-//			projectName := slice[len(slice) - 1]
-//			ct.Foreground(ct.Cyan, false)
-//			pName := wiz.QuestionF("Project Name: [%s] ", projectName)
-//			if pName == "" {
-//				if pName == "" {
-//					project.Name = projectName
-//				} else {
-//					project.Name = pName
-//				}
-//			}
-//
-//			pGroup := wiz.QuestionF("GroupId: [%s] ", "com.company.my")
-//			if pGroup == "" {
-//				project.GroupId = "com.company.my"
-//			} else {
-//				project.GroupId = pGroup
-//			}
-//
-//			pArti := wiz.QuestionF("ArtifactId: [%s] ", projectName)
-//			if pArti == "" {
-//				project.ArtifactId = projectName
-//			} else {
-//				project.ArtifactId = pArti
-//			}
-//
-//			packaging := wiz.QuestionF("Packaging: [%s] ", "tar.gz")
-//			if pArti == "" {
-//				project.Packaging = "tar.gz"
-//			} else {
-//				project.Packaging = packaging
-//			}
-//
-//			file, _ := json.MarshalIndent(&project, "", "  ")
-//			wr := []byte(file)
-//
-//			err := ioutil.WriteFile(dir + "/turtle.json", wr, 0750)
-//			if err != nil {
-//				logger.Fatal(err)
-//			}
-//			ct.Foreground(ct.Yellow, false)
-//			fmt.Println("Writing gobuilder config file...")
-//			fmt.Println(string(wr))
-//			ct.Foreground(ct.White, false)
-//		} else {
-//			fmt.Println("Aborted")
-//			ct.Foreground(ct.White, false)
-//			os.Exit(1)
-//		}
-//	}
-//}
 
 func (t Turtle) Dist() {
 	if project.ProjectType == "static" {
@@ -325,7 +271,7 @@ func (t Turtle) GetProject() (model.Project) {
 	var project model.Project
 	if err != nil {
 		ct.Foreground(ct.Red, true)
-		logger.Error("Workspace busted", err, TURTLE_FILE)
+		logger.Error("Turtle FIle Error.", err, TURTLE_FILE)
 		ct.ResetColor()
 	} else {
 		var c model.Project
@@ -340,5 +286,22 @@ func (t Turtle) GetProject() (model.Project) {
 }
 
 func (t Turtle) Release() {
-	fmt.Println("Releasing project", app.Name, "-", TURTLE_VERSION)
+	prj := t.GetProject()
+	v := prj.Version
+	nextVersion := strings.Replace(v, "-SNAPSHOT", "", -1)
+	prj.Version = nextVersion
+	jsonStr, err := json.MarshalIndent(&prj, "", "  ")
+	if err != nil {
+		logger.Fatal(err)
+	}
+	fmt.Println("Updating:", TURTLE_FILE)
+	err = ioutil.WriteFile(TURTLE_FILE, jsonStr, 00750)
+
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	fmt.Println("Releasing project", app.Name, "-", prj.Version)
+	t.Build()
+	fmt.Println(string(jsonStr))
 }
