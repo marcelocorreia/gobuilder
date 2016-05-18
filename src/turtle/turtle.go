@@ -73,14 +73,22 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 }
 
 func (t Turtle) Build() {
+	dir, _ := os.Getwd()
+	fmt.Println(dir)
+
 	p := t.GetProject()
 	ct.Foreground(ct.Cyan, false)
 	fmt.Println("Building ▶", p.Name + "." + p.Version)
 	ct.Foreground(ct.Green, false)
-	//flags := "\"-X " + p.VersionString + "=" + p.Version + "\""
-	//fmt.Println(flags)
+	args:=[]string{"build", "-F", "-f", "-ldflags=-X main.VERSION="+p.Version}
 
-	rt.RunCommandLogStream("gb", []string{"build"})
+	errRun := rt.RunCommandLogStream("gb", args)
+
+	if errRun != nil {
+		logger.Error("Error building",p.ArtifactId,p.Version,errRun)
+
+	}
+
 	if _, err := os.Stat(distFolder); os.IsNotExist(err) {
 		os.Mkdir(distFolder, 00750)
 	}
