@@ -80,12 +80,12 @@ func (t Turtle) Build() {
 	ct.Foreground(ct.Cyan, false)
 	fmt.Println("Building ▶", p.Name + "." + p.Version)
 	ct.Foreground(ct.Green, false)
-	args:=[]string{"build", "-F", "-f", "-ldflags=-X main.VERSION="+p.Version}
+	args := []string{"build", "-F", "-f", "-ldflags=-X " + p.VersionString + "=" + p.Version}
 
 	errRun := rt.RunCommandLogStream("gb", args)
 
 	if errRun != nil {
-		logger.Error("Error building",p.ArtifactId,p.Version,errRun)
+		logger.Error("Error building", p.ArtifactId, p.Version, errRun)
 
 	}
 
