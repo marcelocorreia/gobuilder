@@ -2,7 +2,7 @@
   "group-id": "io.correia",
   "artifact-id": "turtle",
   "name": "turtle",
-  "version": "1.4",
+  "version": "1.5-SNAPSHOT",
   "packaging": "tar.gz",
   "project-type": "go",
   "repositories": [],
