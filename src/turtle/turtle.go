@@ -70,7 +70,7 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 }
 
 func (t Turtle) Build() {
-	p:= t.GetProject()
+	p := t.GetProject()
 	goBuilder.Build(&p)
 }
 
@@ -291,7 +291,10 @@ func (t Turtle) Release() {
 	fmt.Println("Releasing project", app.Name, "-", prj.Version)
 	t.Clean()
 	rt.RunCommandLogStream("git", []string{"tag", prj.Version})
-	rt.RunCommandLogStream("git", []string{"push","--tags"})
+	rt.RunCommandLogStream("git", []string{"add", ".", "--all"})
+	rt.RunCommandLogStream("git", []string{"commit", "-m", "Release: " + prj.Version})
+	rt.RunCommandLogStream("git", []string{"push"})
+	rt.RunCommandLogStream("git", []string{"push", "--tags"})
 
 	brkdwn := strings.Split(prj.Version, ".")
 
