@@ -3,7 +3,7 @@
   "artifact-id": "turtle",
   "name": "turtle",
   "project-type": "go",
-  "version": "1.9-SNAPSHOT",
+  "version": "1.9",
   "file": "",
   "packaging": "tar.gz",
   "generate-pom": false,
