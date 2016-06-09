@@ -70,26 +70,8 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 }
 
 func (t Turtle) Build() {
-	dir, _ := os.Getwd()
-	fmt.Println(dir)
-
-	p := t.GetProject()
-	ct.Foreground(ct.Cyan, false)
-	fmt.Println("Building ▶", p.Name + "." + p.Version)
-	ct.Foreground(ct.Green, false)
-	args := []string{"build", "-F", "-f", "-ldflags=-X " + p.VersionString + "=" + p.Version}
-
-	errRun := rt.RunCommandLogStream("gb", args)
-
-	if errRun != nil {
-		logger.Error("Error building", p.ArtifactId, p.Version, errRun)
-
-	}
-
-	//if _, err := os.Stat(distFolder); os.IsNotExist(err) {
-	//	os.Mkdir(distFolder, 00750)
-	//}
-	ct.ResetColor()
+	p:= t.GetProject()
+	goBuilder.Build(&p)
 }
 
 func (t Turtle) Clean() {
@@ -307,12 +289,14 @@ func (t Turtle) Release() {
 	}
 
 	fmt.Println("Releasing project", app.Name, "-", prj.Version)
-	t.Build()
+	t.Clean()
 	rt.RunCommandLogStream("git", []string{"tag", prj.Version})
+	rt.RunCommandLogStream("git", []string{"push","--tags"})
 
 	brkdwn := strings.Split(prj.Version, ".")
 
 	var nextDevVersion string
+	goBuilder.Dist(&prj)
 
 	for i := 0; i < (len(brkdwn) - 1); i++ {
 		nextDevVersion += brkdwn[i] + "."
