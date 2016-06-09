@@ -320,4 +320,8 @@ func (t Turtle) Release() {
 	if err != nil {
 		logger.Error(err)
 	}
+	rt.RunCommandLogStream("git", []string{"add", ".", "--all"})
+	rt.RunCommandLogStream("git", []string{"commit", "-m", "New Development Version: " + prj.Version})
+	rt.RunCommandLogStream("git", []string{"push"})
+
 }
