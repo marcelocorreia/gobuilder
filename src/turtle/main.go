@@ -20,14 +20,14 @@ var (
 	TURTLE_HOME string
 	TURTLE_PROJECT_PATH string
 	TURTLE_CONFIG_FILE string
-	rt = utils.RuntimeHelper{}
-	logger = logd.GetLogger()
-	wiz = utils.Wizard{}
-	compressor = utils.Compress{}
+	rt = &utils.RuntimeHelper{}
+	logger = *logd.GetLogger()
+	wiz = &utils.Wizard{}
+	compressor = &utils.Compress{}
 	project model.Project
-	fileUtils = utils.FileUtils{}
+	fileUtils = &utils.FileUtils{}
 	cmds string
-	goBuilder plugin.GoBuilder
+	goBuilder *plugin.GoBuilder
 	distFolder string
 )
 
@@ -115,7 +115,7 @@ func main() {
 	tt.LoadConfig()
 	app.Version(project.Version)
 
-	goBuilder = plugin.GoBuilder{Project:project, DistFolder:distFolder}
+	goBuilder = &plugin.GoBuilder{Project:project, DistFolder:distFolder}
 
 	switch cmds {
 	case "build":
@@ -153,9 +153,7 @@ func main() {
 	case "version":
 		fmt.Println(app.Name, VERSION)
 
-	//if (*EE) {
-	//s.EE()
-	//}
+
 	}
 	ct.ResetColor()
 }

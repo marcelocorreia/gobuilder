@@ -24,7 +24,6 @@ type Repository struct {
 }
 
 type TurtleConfig struct {
-	ExternalApps []ExternalApp `json:"external-apps,ommitempty"`
 	Accounts     []Account    `json:"accounts,ommitempty"`
 	Repositories []Repository `json:"repositories,ommitempty"`
 }

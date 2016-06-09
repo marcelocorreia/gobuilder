@@ -2,29 +2,31 @@
   "group-id": "io.correia",
   "artifact-id": "turtle",
   "name": "turtle",
-  "version": "1.5-SNAPSHOT",
-  "packaging": "tar.gz",
   "project-type": "go",
+  "version": "1.7-SNAPSHOT",
+  "file": "",
+  "packaging": "tar.gz",
+  "generate-pom": false,
   "repositories": [],
-  "version-string": "main.VERSION",
   "builds": [
     {
-      "id": "darwin",
-      "type": "go",
       "os": "darwin",
-      "arch": "amd64"
+      "arch": "amd64",
+      "type": "go",
+      "id": "darwin"
     },
     {
-      "id": "linux",
-      "type": "go",
       "os": "linux",
-      "arch": "amd64"
+      "arch": "amd64",
+      "type": "go",
+      "id": "linux"
     },
     {
-      "id": "windows",
-      "type": "go",
       "os": "windows",
-      "arch": "amd64"
+      "arch": "amd64",
+      "type": "go",
+      "id": "windows"
     }
-  ]
+  ],
+  "version-string": "main.VERSION"
 }

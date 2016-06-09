@@ -11,6 +11,7 @@ import (
 	"strings"
 	"github.com/correia-io/goutils/src/utils"
 	"github.com/daviddengcn/go-colortext"
+	"strconv"
 )
 
 type Tortuga interface {
@@ -30,7 +31,7 @@ type Tortuga interface {
 }
 
 type Turtle struct {
-	config model.TurtleConfig
+	config *model.TurtleConfig
 }
 
 func (t Turtle) SaveConfig() (error) {
@@ -50,14 +51,10 @@ func (t Turtle) SaveConfig() (error) {
 
 func (t Turtle) LoadConfig() (model.TurtleConfig) {
 	ct.Foreground(ct.Cyan, false)
-	//fmt.Println("Loading Turtle config file:", TURTLE_CONFIG_FILE)
 
 	var cfg model.TurtleConfig
 	cFile, err := ioutil.ReadFile(TURTLE_CONFIG_FILE)
-	if err != nil {
-		ct.Foreground(ct.Red, true)
-		ct.ResetColor()
-	} else {
+	if err == nil {
 		var t model.TurtleConfig
 		err := json.Unmarshal(cFile, &t)
 		if err != nil {
@@ -67,7 +64,7 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 	}
 	ct.ResetColor()
 
-	t.config = cfg
+	t.config = &cfg
 
 	return cfg
 }
@@ -89,9 +86,9 @@ func (t Turtle) Build() {
 
 	}
 
-	if _, err := os.Stat(distFolder); os.IsNotExist(err) {
-		os.Mkdir(distFolder, 00750)
-	}
+	//if _, err := os.Stat(distFolder); os.IsNotExist(err) {
+	//	os.Mkdir(distFolder, 00750)
+	//}
 	ct.ResetColor()
 }
 
@@ -145,7 +142,7 @@ func (t Turtle) Dist() {
 		os.RemoveAll(tmpDir)
 		ct.ResetColor()
 	} else if (project.ProjectType == "go") {
-		goBuilder.Dist(project)
+		goBuilder.Dist(&project)
 		os.Unsetenv("GOOS")
 		os.Unsetenv("GOARCH")
 		os.RemoveAll("bin/")
@@ -279,7 +276,7 @@ func (t Turtle) GetProject() (model.Project) {
 	var project model.Project
 	if err != nil {
 		ct.Foreground(ct.Red, true)
-		logger.Error("Turtle FIle Error.", err, TURTLE_FILE)
+		//logger.Error("Turtle File Error.", err, TURTLE_FILE)
 		ct.ResetColor()
 	} else {
 		var c model.Project
@@ -311,5 +308,29 @@ func (t Turtle) Release() {
 
 	fmt.Println("Releasing project", app.Name, "-", prj.Version)
 	t.Build()
-	fmt.Println(string(jsonStr))
+	rt.RunCommandLogStream("git", []string{"tag", prj.Version})
+
+	brkdwn := strings.Split(prj.Version, ".")
+
+	var nextDevVersion string
+
+	for i := 0; i < (len(brkdwn) - 1); i++ {
+		nextDevVersion += brkdwn[i] + "."
+	}
+	res, _ := strconv.Atoi(brkdwn[(len(brkdwn) - 1)])
+
+	nextDevVersion += strconv.Itoa(res + 1)
+
+	prj.Version = nextDevVersion + "-SNAPSHOT"
+
+	jsonStr, err = json.MarshalIndent(&prj, "", "  ")
+	if err != nil {
+		logger.Error(err)
+	}
+
+	err = ioutil.WriteFile(TURTLE_FILE, jsonStr, 00750)
+
+	if err != nil {
+		logger.Error(err)
+	}
 }
