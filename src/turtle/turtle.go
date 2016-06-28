@@ -9,7 +9,7 @@ import (
 	"model"
 	"github.com/pborman/uuid"
 	"strings"
-	"github.com/correia-io/goutils/src/utils"
+	"utils"
 	"github.com/daviddengcn/go-colortext"
 	"strconv"
 )
@@ -210,7 +210,7 @@ func (t Turtle) Deploy2Nexus(builds []string) {
 			if project.ProjectType == "go" {
 				artifactId = fmt.Sprintf("%s-%s-%s", project.ArtifactId, build.OS, build.Arch)
 			} else {
-				artifactId = project.Version
+				artifactId = project.ArtifactId
 			}
 
 			file := fmt.Sprintf("%s-%s.%s", artifactId, project.Version, project.Packaging)

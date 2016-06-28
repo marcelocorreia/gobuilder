@@ -13,6 +13,10 @@ type Installer interface {
 
 }
 
+type Documentation interface {
+
+}
+
 type Tester interface {
 
 }

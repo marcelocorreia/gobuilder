@@ -7,12 +7,12 @@ import (
 	"os/signal"
 	"syscall"
 	"github.com/daviddengcn/go-colortext"
-	"github.com/correia-io/goutils/src/utils"
-	"github.com/correia-io/goutils/src/logd"
 	"model"
 	"plugin"
 	"strings"
 	"path/filepath"
+	"utils"
+	"logd"
 )
 
 var (

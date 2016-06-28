@@ -7,7 +7,7 @@ import (
 	"github.com/daviddengcn/go-colortext"
 	"io/ioutil"
 	"strings"
-	"github.com/correia-io/goutils/src/utils"
+	"utils"
 )
 
 type GoBuilder struct {}
