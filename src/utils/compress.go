@@ -18,7 +18,7 @@ type Compressor interface  {
 
 type Compress struct {}
 
-func (t Compress)Tar(source, target string){
+func (t Compress) Tar(source, target string){
 	rt := RuntimeHelper{}
 	fmt.Printf("Archiving: %s as %s\n", source, target)
 	args := []string{"-cvzf", target, source}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"path/filepath"
 	"fmt"
 	"encoding/json"
 	"io/ioutil"
@@ -41,17 +40,17 @@ func (t Turtle) SaveConfig() (error) {
 	wr := []byte(resp)
 	logger.Debug("Writing config file", TURTLE_CONFIG_FILE)
 	err := ioutil.WriteFile(TURTLE_CONFIG_FILE, wr, 0750)
-
+	
 	if (err != nil) {
 		return err
 	}
-
+	
 	return nil
 }
 
 func (t Turtle) LoadConfig() (model.TurtleConfig) {
 	ct.Foreground(ct.Cyan, false)
-
+	
 	var cfg model.TurtleConfig
 	cFile, err := ioutil.ReadFile(TURTLE_CONFIG_FILE)
 	if err == nil {
@@ -63,9 +62,9 @@ func (t Turtle) LoadConfig() (model.TurtleConfig) {
 		cfg = t
 	}
 	ct.ResetColor()
-
+	
 	t.config = &cfg
-
+	
 	return cfg
 }
 
@@ -105,17 +104,17 @@ func (t Turtle) Dist() {
 		ct.Foreground(ct.Green, false)
 		fmt.Println("Packaging Static Project", project.ArtifactId)
 		tmpDir := "/tmp/" + uuid.New()
-
+		
 		fmt.Println(os.Getwd())
 		source, _ := os.Getwd()
-
+		
 		fileUtils.CopyDir(source, tmpDir + "/" + project.ArtifactId)
-
+		
 		os.RemoveAll(dist)
 		if e, _ := fileUtils.Exists(dist); !e {
 			os.Mkdir(distFolder, 00750)
 		}
-
+		
 		distName := fmt.Sprintf(source + "/%s-%s.%s", project.ArtifactId, project.Version, project.Packaging)
 		os.Chdir(tmpDir)
 		fmt.Println(tmpDir)
@@ -147,17 +146,13 @@ func (t Turtle) InstallGB() {
 	ct.Foreground(ct.Green, false)
 	fmt.Println("Done.")
 	ct.ResetColor()
-
+	
 }
 
-func (t Turtle) RunTests() {
-	dir, err := filepath.Abs(filepath.Dir(TURTLE_PROJECT_PATH))
-	os.Chdir(dir)
-	if err != nil {
-		logger.Fatal(err)
-	}
-	logger.Debug("Runing tests @", dir)
-	rt.RunCommandLogStream("gb", []string{"test"})
+func (t Turtle) RunTests(coverage bool) {
+	//t.Clean()
+	p := t.GetProject()
+	goBuilder.Test(&p, coverage)
 }
 
 func (t Turtle) Deploy2Nexus(builds []string) {
@@ -169,27 +164,27 @@ func (t Turtle) Deploy2Nexus(builds []string) {
 	project := t.GetProject()
 	var jobRepo model.Repository
 	fmt.Println("Starting Deployment to Nexus Jobs:", builds)
-
+	
 	for _, build := range project.Builds {
 		if utils.StringInSlice(build.ID, builds) {
 			ct.Foreground(ct.Cyan, true)
-
+			
 			fmt.Println("Running build:", build.Type, build.ID)
-
+			
 			ct.Foreground(ct.Green, false)
 			for _, rp := range t.LoadConfig().Repositories {
 				if rp.Id == *deployToNexusRepoId {
 					jobRepo = rp
 				}
 			}
-
+			
 			// Overrides repositories from Turtle Config
 			for _, rp := range project.Repositories {
 				if rp.Id == *deployToNexusRepoId {
 					jobRepo = rp
 				}
 			}
-
+			
 			if jobRepo.Type == "releases" && strings.Contains(project.Version, "SNAPSHOT") {
 				ct.Foreground(ct.Red, true)
 				fmt.Println("Error: You are trying to deploy a unreleased package into repository of type\"releases\"")
@@ -206,13 +201,13 @@ func (t Turtle) Deploy2Nexus(builds []string) {
 				os.Exit(1)
 			}
 			var artifactId string
-
+			
 			if project.ProjectType == "go" {
 				artifactId = fmt.Sprintf("%s-%s-%s", project.ArtifactId, build.OS, build.Arch)
 			} else {
 				artifactId = project.ArtifactId
 			}
-
+			
 			file := fmt.Sprintf("%s-%s.%s", artifactId, project.Version, project.Packaging)
 			fmt.Println("Deploying file:", file)
 			args := []string{
@@ -233,7 +228,7 @@ func (t Turtle) Deploy2Nexus(builds []string) {
 			}
 		}
 	}
-
+	
 }
 
 type repoError struct {
@@ -283,11 +278,11 @@ func (t Turtle) Release() {
 	}
 	fmt.Println("Updating:", TURTLE_FILE)
 	err = ioutil.WriteFile(TURTLE_FILE, jsonStr, 00750)
-
+	
 	if err != nil {
 		logger.Fatal(err)
 	}
-
+	
 	fmt.Println("Releasing project", app.Name, "-", prj.Version)
 	t.Clean()
 	rt.RunCommandLogStream("git", []string{"tag", prj.Version})
@@ -295,33 +290,33 @@ func (t Turtle) Release() {
 	rt.RunCommandLogStream("git", []string{"commit", "-m", "Release: " + prj.Version})
 	rt.RunCommandLogStream("git", []string{"push"})
 	rt.RunCommandLogStream("git", []string{"push", "--tags"})
-
+	
 	brkdwn := strings.Split(prj.Version, ".")
-
+	
 	var nextDevVersion string
 	goBuilder.Dist(&prj)
-
+	
 	for i := 0; i < (len(brkdwn) - 1); i++ {
 		nextDevVersion += brkdwn[i] + "."
 	}
 	res, _ := strconv.Atoi(brkdwn[(len(brkdwn) - 1)])
-
+	
 	nextDevVersion += strconv.Itoa(res + 1)
-
+	
 	prj.Version = nextDevVersion + "-SNAPSHOT"
-
+	
 	jsonStr, err = json.MarshalIndent(&prj, "", "  ")
 	if err != nil {
 		logger.Error(err)
 	}
-
+	
 	err = ioutil.WriteFile(TURTLE_FILE, jsonStr, 00750)
-
+	
 	if err != nil {
 		logger.Error(err)
 	}
 	rt.RunCommandLogStream("git", []string{"add", ".", "--all"})
 	rt.RunCommandLogStream("git", []string{"commit", "-m", "New Development Version: " + prj.Version})
 	rt.RunCommandLogStream("git", []string{"push"})
-
+	
 }

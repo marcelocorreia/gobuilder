@@ -38,7 +38,10 @@ var (
 
 	batchMode = kingpin.Flag("batch", "Runs commands without asking for any input").Bool()
 
-	buildCommand = kingpin.Command("build", "Runs commands without asking for any input")
+	buildCommand = kingpin.Command("build", "Runs GB Build")
+	
+	testCommand = kingpin.Command("test", "Executes GO tests")
+	testCommandCoverage = kingpin.Flag("coverage", "Runs commands without asking for any input").Bool()
 
 	cleanCommand = kingpin.Command("clean", "Cleans all packages and binaries")
 
@@ -55,7 +58,6 @@ var (
 
 	installCommand = kingpin.Command("install", "Install helper apps")
 	installGBCommand = installCommand.Command("gb", "Installs GB")
-	testCommand = kingpin.Command("test", "Run Tests")
 
 	releaseCommand = kingpin.Command("release", "Performs SCM release.")
 
@@ -146,7 +148,7 @@ func main() {
 	case "install gb":
 		tt.InstallGB()
 	case "test":
-		tt.RunTests()
+		tt.RunTests(*testCommandCoverage)
 	case "release":
 		tt.Release()
 
