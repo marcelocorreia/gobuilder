@@ -9,8 +9,6 @@
 - [Deploying Stuff with Turtle](https://github.com/marcelocorreia/turtle#deploying-stuff-with-turtle)
 - [Project Types](#project-types)
 
-
-
 ##About Turtle
 Turtle is a build and deployment helper tool where goodies are being implemented as needed.
 It is trying to bring some of the concepts from Maven to other platforms and help when possible. Not too ambitious just filling a gap on BAU operations.
